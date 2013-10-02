@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<head>
+<title>项目名：LisHa</title>
+<!-- 2013-10-02 Wed 21:13 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012  Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "%ALIGN",
+        displayIndent: "%INDENT",
+
+        "HTML-CSS": {
+             scale: %SCALE,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">项目名：LisHa</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 引子</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+2013年9月10日，这一天是教师节，但对于一个程序员来说却没有什么特别。我坐在工位上一边翻看着软件的运行日志，一边构思着如何用Haskell实现对日志信息的自动解析，一边刷着微博。突然一条微博推荐的文章引起了我的兴趣。这篇文章(在<a href="http://norvig.com/lispy.html">这里</a>）讲解如何利用Python实现一个简单Lisp语言解释器。印象中已经不止一次看到用某某语言实现Lisp/Scheme解释器的文章。大概因为Lisp语法简洁，又具备程序语言的基本要素，所以才被众多程序员拿来练手。
+</p>
+
+<p>
+因为这篇文章的启发，正在学习Haskell的我，也有了利用Haskell实现Lisp解释器的想法。虽然Haskell版的Lisp解释器早已有之（比如<a href="http://www.defmacro.org/ramblings/lisp-in-haskell.html">这里</a>），但我也不妨“重走一遍长征路”，以借机将已学的Haskell技术再回味琢磨一番，并在开发过程中发现问题，继续探索未知的领域。毕竟，学习一门语言，无论是自然语言还是计算机语言，最重要的都是实践。实践出真知。所以，就这么决定了，我来实现一个Haskell版的Lisp解释器。
+</p>
+
+<p>
+Lisp是一门古老的语言，诞生于1958年，是现今还在广泛使用的高级语言之中的第二高龄<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>。Lisp同时也是一个语言大家庭，在其一个甲子有余的演化过程中，衍生出众多方言，例如现在正在默默支持我写作的Emacs Lisp，以及作为通用语言而更为广泛使用的Common Lispt和Scheme。三者中，Scheme语法最为简练，也是众多Lsip解释器的首选。我们的Lisp解释器也不例外，就以Scheme为目标语言。
+</p>
+
+<p>
+现在是时候给项目起个名字了。既然是以Haskell实现Lisp解释器，就将Lisp与Haskell两个词合并，项目名就叫LisHa。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 为什么选择Haskell</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+在浸淫于C++编程工作许多年之后，我对这门语言已经有些审美疲劳。正如Stroustrup教授在2013年度Going Native大会上所说，C++是”一门轻量级抽象的编程语言“<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>。所以，编写C++程序时总是要考虑语句是如何反映到硬件操作尤其是对内存的操作上的。这固然使得C++编译出的程序的运行效率可以和C媲美，但另一方面，也使得程序员须花大量精力考虑算法在硬件平台上的具体实现，而不能专注于算法本身，同时，也使得C++程序易于出错，难于调试。我希望能找到一门更抽象更精练的语言来换换口味。
+</p>
+
+<p>
+除了C++，Python和Tcl也是我的常用编程语言。刚开始学习Python时，其清爽的语法和特色鲜明的缩进式排版都曾使我眼前一亮。但是，也许是我学艺不精，没有领会Python的精髓，在使用Python编程一段时间以后，我感觉虽然其语法非常简练，却仍然需要在设计算法时关心数据在内存中的存取。除了一些语法糖之外，本质上和C++没什么差别。至于Tcl，我无话可说。
+</p>
+
+<p>
+有没有比C++和Python更加抽象的语言呢？带着这个问题，我把目光投向了一个陌生的领域——函数式编程，开始学习Haskell。函数式编程语言众多，而我之选择Haskell，纯粹是因为其据称是最具发展潜力的函数式编程语言。不管怎样，在学习了一段时间之后，我感觉Haskell正是我所寻找的那个语言。与C++及Python相比，Haskell代码更精练，用其编程时的思维方式更加抽象，同时程序更易维护。并且，Haskell于我还有一个独特的魅力，在于其更有潜力成为一种软硬兼顾的语言。有关Haskell的这些特点，且让我慢慢道来。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Haskell更抽象</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+说Haskell更抽象，其原因一言以蔽之，Haskell没有变量。
+</p>
+
+<p>
+虽然在Haskell中也存在着一些类似于变量操作的语句，例如<a href="#src:not_variable">1</a>中的 <code>let</code> 语句。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">Haskell中的let不是赋值</label>
+<pre class="src src-haskell" id="src:not_variable"><span style="color: #87cefa;">main</span> <span style="color: #eedd82;">=</span> <span style="color: #00ffff;">do</span>
+  <span style="color: #00ffff;">let</span> a <span style="color: #eedd82;">=</span> [4, 9, 7, 6, 15]
+      b <span style="color: #eedd82;">=</span> minimum a
+  putStrLn (<span style="color: #ffa07a;">"min of "</span> <span style="color: #eedd82;">++</span> show a <span style="color: #eedd82;">++</span> <span style="color: #ffa07a;">" is "</span> <span style="color: #eedd82;">++</span> show b)
+</pre>
+</div>
+<p>
+但这里的 <code>let</code> 语句并不是为变量赋值，而是定义一种关联关系，将等号右边的内容与左边的标识符相关联，使得编译器在随后的代码中一旦遇到左边的标识符，便可知其所代表的内容并进行相应的优化与编译。所以，标识符 <code>a</code>, <code>b</code> 并不指代存储器中的某块空间，也就不能称为变量。在以后的讨论中我们还会看到，等号左边的形式不仅限于一个标识符，还可以是函数定义，以及多种复杂的匹配模式，这也远不是赋值语句所能解释的。
+</p>
+
+<p>
+对于象我一样，从VB/Pascal/C/C++等等的语言开始编程之路的程序员来说，变量仿佛是程序语言中天然存在一样。我们利用变量保存数据、传递函数参数、控制循环等等，可以说变量是编程解题的重要工具，不可或缺。但是，居然有一种程序语言没有变量，听起来有些不可思议。更不用说，当我发现，因为没有办法声明循环变量，所以Haskell连循环也不支持时的惊讶感觉。显然，C++编程中的那些惯用的解题思路在Haskell中不并适用。
+</p>
+
+<p>
+为什么Haskell没变量，在回答这个问题之前，我们需要先讨论清楚变量是什么。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> 变量的本质</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+首先，变量是数据的容器。我们可以从变量中读出数据，也可以向其写入数据。但在同一时刻，我们只可能或者从其读出或者向其写入数据，且新写入的数据将覆盖原有数据。无论是C++，Python，Java，Delphi还是什么其它语言（当然，不包括Haskell），其变量都满足以上描述。数据结构或者算法的书籍在介绍变量这个概念时通常都会用交换两变量内的数据为例来演示变量作为数据的功能。对于一般数据类型，要交换两变量中的数据，总是要引入第三个变量来保存中间数据。例如，在C++中交换两变量数据的函数模板如<a href="#src:cpp_swap">2</a>所示。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">C++，交换两变量值的函数模板</label>
+<pre class="src src-c++" id="src:cpp_swap"><span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T</span>&gt;
+<span style="color: #98fb98;">void</span> <span style="color: #87cefa;">swap</span>(<span style="color: #98fb98;">T</span> &amp;<span style="color: #eedd82;">a</span>, <span style="color: #98fb98;">T</span> &amp;<span style="color: #eedd82;">b</span>) {<span style="color: #98fb98;">T</span> <span style="color: #eedd82;">c</span> = a; a = b; b = c;}
+</pre>
+</div>
+<p>
+至于其它语言，虽然实现方式千差万别，但都或显式或隐式地引入第三个变量以保存中间数据。例如在Python中，通常用以下语句交换两个变量中的数据：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #eedd82;">a</span>, <span style="color: #eedd82;">b</span> = b, a <span style="color: #ff7f24;"># </span><span style="color: #ff7f24;">&#38544;&#21547;&#26500;&#36896;&#19968;&#20010;&#20803;&#32452;</span>
+</pre>
+</div>
+<p>
+等号右边的 <code>b, a</code> 实际上隐含构造了一个二元组，其中保存了对变量b和a所引用的数据的引用。
+</p>
+
+<p>
+可见，即使像“交换两变量值”这样简单的算法，也会因为变量的约束而变得略微繁琐。更不用对于说排序、查找等等复杂的算法，程序员除了要考虑数据之间的计算关系之外，还要考虑另一个非常重要的问题，即数据在变量中的存取时机。只有在正确的时机从变量中读出数据，做出正确的运算得到新数据，并在正确的时机写入正确的变量，才能使得程序得到正确的结果。
+</p>
+
+<p>
+其次，无论其类型如何，程序语言中的变量最终都将指代存储器（CPU寄存器，内存，或者外设中的存储器）中的某块存储空间。所以可以说，变量是程序语言对存储空间的抽象，也是程序员用以控制存储空间的媒介。变量的存在，反过来说明该程序语言还无法根据算法描述自动规划数据在存储器间的存取时机，而有赖于程序员通过对变量的操作给定。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-1-1" class="outline-5">
+<h5 id="sec-2-1-1-1"><span class="section-number-5">2.1.1.1</span> 禁用变量的好处与不足</h5>
+<div class="outline-text-5" id="text-2-1-1-1">
+<p>
+Haskell不提供变量，也就阻断了程序员直接操作存储器的通路。所以用Haskell实现某个算法时，必须将原本对存储器的直接操作需求，提炼成更为抽象的数据间的映射关系，再写成代码。Haskell编译器将根据代码自动规划变量的声明，回收及对其的读写，以正确实现算法的功能。
+</p>
+
+<p>
+这样做的一个明显的好处，就是Haskell程序员不必花费大量精力去规划变量的存取时机，可以专注于算法本身的数据映射的正确性上。程序设计中，有很大一部分错误是由于不当的变量存取时机引起的。由Haskell编译器自动规划的变量存取，总可以保证其正确反映代码的意图。所以，只要代码所设计的算法间的数据映射关系正确，则编译出的目标代码就可以得到正确的结果。这大大降低了程序出错的概率，使得代码更加可读也更易维护。《Real World Haskell》的作者曾在该书前言中说到：
+</p>
+<blockquote>
+<p>
+Even with years of experience, we remain astonished and pleased by how often our Haskell programs simply work on the first try, once we fix those compilation errors.
+</p>
+
+<p>
+我们经常发现，在修复所有的编译错误后Haskell程序第一次运行便可正确工作。对此，即使有多年经验的我们仍然会感到惊讶与欣喜。
+</p>
+</blockquote>
+<p>
+对此，仅有一点Haskell编程经历的我深表赞同。
+</p>
+
+<p>
+当然，禁用变量也有代价。编译器自动规划的变量存取肯定不如有经验的程序员所作的规划那样高效，所以Haskell的程序运行时间无法与C/C++程序相比。另外，虽然变量规划由编译器包办，但其具体实现还是依赖于代码的说明。同一个算法，可以有多种Haskell代码实现，也就有可能导致不同的变量规划，从而导致程序运行效率之不同。要提高Haskell程序的运行效率，还是需要对Haskell中的变量规划，内存管理有一定了解。所以，Haskell提高了一定高度的抽象，但还不能完全摆脱对存储器结构的依赖。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> 函数式编程</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+由于没有变量，也没有循环，所以通常的编程思路组织方式如流程图、伪码等对Haskell并不适用。那么，Haskell的编程思路应该如何组织呢？答案是函数式编程。让我们通过一个实际的算法例子来体会什么是函数式编程。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-2-1" class="outline-5">
+<h5 id="sec-2-1-2-1"><span class="section-number-5">2.1.2.1</span> 冒泡函数</h5>
+<div class="outline-text-5" id="text-2-1-2-1">
+<p>
+回到“交换两个变量中的数据”的问题。由于Haskell中没有变量，所以也无需去交换两个变量的数据。那么，在其它语言中需要交换两个变量的算法，在Haskell中应该如何实现呢？比如，冒泡排序就是一个典型的需要交换两变量数据的算法。为了简化讨论，我们在这里只考虑冒泡排序中的冒泡问题，即给定一个序列，如何将该序列的最大元素移动到序列首。并且，由于Haskell中最方便的数据结构是单向链表，在此，我们约定序列是保存在单向链表中。
+</p>
+
+<p>
+在有变量的程序语言中，冒泡问题可以通过一个循环解决。通过循环，从链表首节点遍历到链表的尾节点之前的节点，当当前节点的数据大于下一个节点的数据时，交换这两个节点的数据<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>。这样，遍历结束后，最大数据将保存在链表尾节点中。最后，再交换链表首尾节点的数据即可。该算法的一个最简单的C++实现如<a href="#src:cpp_bubble">3</a>所示。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">C++的冒泡算法实现</label>
+<pre class="src src-c++" id="src:cpp_bubble"><span style="color: #00ffff;">struct</span> <span style="color: #98fb98;">node</span>
+{
+  <span style="color: #98fb98;">int</span> <span style="color: #eedd82;">v</span>;
+  <span style="color: #98fb98;">node</span> *<span style="color: #eedd82;">next</span>;
+};
+
+<span style="color: #98fb98;">void</span> <span style="color: #87cefa;">pop_bubble</span>(<span style="color: #98fb98;">node</span> *<span style="color: #eedd82;">head</span>)
+{
+  <span style="color: #00ffff;">if</span> (head) {
+    <span style="color: #98fb98;">node</span> *<span style="color: #eedd82;">p</span> = head;
+    <span style="color: #00ffff;">for</span> (; p-&gt;next; p = p-&gt;next) {
+      <span style="color: #00ffff;">if</span> (p-&gt;v &gt; p-&gt;next-&gt;v)
+        swap(p-&gt;v, p-&gt;next-&gt;v); <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#20511;&#29992;&#20043;&#21069;&#23454;&#29616;&#30340;swap&#20989;&#25968;&#12290;</span>
+    }
+    swap(head-&gt;v, p-&gt;v);
+  }
+}
+</pre>
+</div>
+
+<p>
+但是，要使用Haskell解决冒泡问题，我们必须忘记变量、忘记循环，从程序语言诞生之前的人类智慧——数学中寻找思路。
+</p>
+
+<p>
+具体来说，我们需要构造出一个函数，函数的输入是某种形式的序列，输出也是同种形式的序列，并且满足输出序列是输出序列的重排列且输出序列的首元素是序列中的最大元素。由于问题中并没有约束序列的长度（即列表的元素数），所以构造出的函数（或者函数集）必须能处理任意长度为 \(n\) 的序列。
+</p>
+
+<p>
+对于这种针对任意整数 \(n\) 的函数构造或证明，数学上有一个强有力的工具，即数学归纳法。假设针对长度为 \(n-1\) 的序列，我们已经构造出满足条件的函数 \(Bub^{n-1}\) ，那么，如果可以利用 \(Bub^{n-1}\) 构造出针对长度为 \(n\) 的序列的函数 \(Bub^n\) ，并且针对元素为1的序列找到一个种子函数 \(Bub^1\) ，则根据数学归纳法，我们便可以为任意长度的序列构造冒泡函数，从而解决冒泡问题。
+</p>
+
+<p>
+种子函数 \(Bub^1\) 很容易找到。对于长度为1的序列，其本身已经满足首元素最大，所以函数无需对序列做任何操作，只需要返回该序列即可，既 \(Bub^1(L)=L\) 。
+</p>
+
+<p>
+问题的关键在于找到从 \(Bub^{n-1}\) 构造 \(Bub^n\) 的方法。这也不是什么难事。当 \(n>0\) 时，长度为 \(n\) 的序列 \(L\) 总可以分解成首元素 \(e\) 和将 \(e\) 从 \(L\) 中移除后的剩余序列 \(L_r\) 。 \(L_r\) 长度为 \(n-1\) ，所以可以通过 \(Bub^{n-1}\) 得到冒泡后的序列 \(L'=Bub^{n-1}(L_r)\) 。同样， \(L'\) 也可以分解成其首元素 \(e'\) 和剩余序列 \(L'_r\) 。此时， \(L\) 已经经过两重分解，得到两个元素 \(e\) 、 \(e'\) 和一个剩余序列 \(L'_r\) ，并且对于 \(L'_r\) 中的任意元素 \(e_r\) ，都满足 \(e'>e_r\) 。那么，当 \(e'>e\) 时， \(e'\) 就是序列 \(L\) 中最大的元素，否则 \(e\) 就是最大元素，只需选择其中较大者做为函数返回序列的首元素，再与较小者和剩余序列 \(L'_r\) 组成完整序列即可。
+</p>
+
+<p>
+将以上讨论中所用到的几种对序列的操作，以函数的形式标记如下：
+</p>
+<ul class="org-ul">
+<li>\(Head(L)\) 返回序列的首元素。
+</li>
+<li>\(Tail(L)\) 返回序列将首元素移除后的剩余序列。
+</li>
+<li>\(Cons(e, L)\) 构造一个新序列 \(L'\) ， \(L'\) 满足 \(Head(L')=e\) 及 \(Tail(L')=L\) 。
+</li>
+</ul>
+<p>
+对于单向链表，以上几种函数的操作都很容易实现。
+</p>
+
+<p>
+那么，冒泡函数 \(Bub^n\) 可以写成如下形式。
+</p>
+\begin{equation}
+\begin{array}{rcl}
+Bub^1(L) & = & L \\
+Bub^n(L) & = &
+\left\{ 
+\begin{array}{ll}
+Cons(e, Cons(e', L_r')) & \textrm{if $e>e'$} \\
+Cons(e', Cons(e, L_r')) & \textrm{otherwise}
+\end{array}
+\right. \\
+& \textrm{Where} & 
+\begin{array}{rcl}
+e & = & Head(L) \\
+L_r & = & Tail(L) \\
+L' & = & Bub^{n-1}(L_r) \\
+e' & = & Head(L') \\
+L_r' & = & Tail(L')
+\end{array}
+\end{array}
+\end{equation}
+
+<p>
+Haskell的一大魅力在于，很多时候，我们可以轻易地将解题公式翻译成Haskell代码。例如上面的公式，可以照翻成如<a href="#src:haskell_bubble">4</a>所示的Haskell冒泡函数 <code>bub</code> 的代码。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">Haskell的冒泡函数</label>
+<pre class="src src-haskell" id="src:haskell_bubble"><span style="color: #87cefa;">bub</span> (e<span style="color: #98fb98;">:[]</span>) <span style="color: #eedd82;">=</span> [e] <span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">&#24403;&#24207;&#21015;&#21482;&#26377;&#19968;&#20010;&#20803;&#32032;e&#26102;&#65292;&#36820;&#22238;&#35813;&#24207;&#21015;</span>
+<span style="color: #87cefa;">bub</span> l <span style="color: #eedd82;">|</span> e <span style="color: #eedd82;">&gt;</span> e' <span style="color: #eedd82;">=</span> e<span style="color: #98fb98;">:</span>e'<span style="color: #98fb98;">:</span>lr'
+      <span style="color: #eedd82;">|</span> otherwise <span style="color: #eedd82;">=</span> e'<span style="color: #98fb98;">:</span>e<span style="color: #98fb98;">:</span>lr'
+  <span style="color: #00ffff;">where</span> e <span style="color: #eedd82;">=</span> head l
+        lr <span style="color: #eedd82;">=</span> tail l
+        l' <span style="color: #eedd82;">=</span> bub lr <span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">&#36882;&#24402;&#35843;&#29992;</span>
+        e' <span style="color: #eedd82;">=</span> head l'
+        lr' <span style="color: #eedd82;">=</span> tail l'
+</pre>
+</div>
+<p>
+在此我们不讨论代码细节及其可改进之处。只需大概看一下代码的排版，即使是不了解Haskell的人也能发现代码与上述公式的相似之处，如果再将关键字 <code>otherwise</code> 与公式中的文字对比一下，也许还能猜出 <code>|</code> 在这段Haskell中的含义。
+</p>
+
+<p>
+通过这个实例，我们可以体会出Haskell编程思路的特点。由于没有变量，编程只需专注于设计数据之间的映射关系。在数学上，表示两个数据之间映射关系的实体就是函数。所以，Haskell的编程思路，首先是如何将问题用函数的形式描述，其次是如何构造解决问题所需的函数，最后，以此为参考写出Haskell代码。
+</p>
+
+<p>
+乍看之下，Haskell的这种思路有违于编程常识。但仔细想想，在计算机出现之前，函数才是解决数学计算问题的不二法门。只是在图灵机、冯·诺依曼机等等针对硬件可实现的自动计算原型出现之后，编程思路才囿于变量、循环之中不自知，反而疏远了问题的数学本质。Haskell摒弃变量，将程序的计算模型封装起来，也迫使程序员的思路更接近问题的数学本质。所以说，Haskell更抽象。
+</p>
+
+<p>
+试想，将以上冒泡算法的C++代码和Haskell代码向一位19世纪的学者解释时，哪个他更容易理解呢。我想应该是Haskell吧。
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">&#33050;&#27880;: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+据维基百科<a href="http://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp词条</a>，另第一高龄是Fortran。
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+英文原文“a light-weight abstraction programming language”。
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+当数据尺寸较大，使得交换两数据的运行开销较大时，更经济的方法是交换两节点在链表中的位置。在此，为使讨论简单，只考虑交换两数据的情况。
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="date">Created: 2013-10-02 Wed 21:13</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.1)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
