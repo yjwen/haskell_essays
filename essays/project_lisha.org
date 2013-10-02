@@ -1,5 +1,6 @@
 #+TITLE: 项目名：LisHa
-#+LANGUAGE: zh
+#+LANGUAGE: zh-CN
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
 
 * 引子
   2013年9月10日，这一天是教师节，但对于一个程序员来说却没有什么特别。我坐在工位上一边翻看着软件的运行日志，一边构思着如何用Haskell实现对日志信息的自动解析，一边刷着微博。突然一条微博推荐的文章引起了我的兴趣。这篇文章(在[[http://norvig.com/lispy.html][这里]]）讲解如何利用Python实现一个简单Lisp语言解释器。印象中已经不止一次看到用某某语言实现Lisp/Scheme解释器的文章。大概因为Lisp语法简洁，又具备程序语言的基本要素，所以才被众多程序员拿来练手。
