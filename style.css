@@ -1,6 +1,18 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#content {
+    max-width: 600px;
+    margin: 0 auto;
+}
 pre.src {
     background-color: DimGrey;
     color: White;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #888888;
 }
 
 .org-src-name {
