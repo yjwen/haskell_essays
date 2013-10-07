@@ -133,3 +133,63 @@ Haskell的一大魅力在于，很多时候，我们可以轻易地将解题公�
 试想，将以上冒泡算法的C++代码和Haskell代码向一位19世纪的学者解释时，哪个他更容易理解呢。我想应该是Haskell吧。
 
 [fn:exchange_node] 当数据尺寸较大，使得交换两数据的运行开销较大时，更经济的方法是交换两节点在链表中的位置。在此，为使讨论简单，只考虑交换两数据的情况。
+** Haskell代码更易复用
+可复用的代码对于一个软件项目的开发总是会起到事半功倍的效果。一方面，作者可以用更精炼的代码解决问题；更为重要的另一方面是，复用代码对于维护者更加容易理解。在软件开发中，代码作者与维护者不同是常有的事情。维护者花费一段时间和精力理解了某个函数，然后发现这个函数在多处复用，从而自己也可以“复用”对该函数的理解而更快理解其它代码，这是多么令人身心愉悦的事情。与之相反，在看到有如散文一样信马由缰，以复制粘贴为复用基本方法的代码时，维护者在心里定会咒骂这个作者。
+
+要写出结构精巧，高度复用的代码，作者对问题的提炼与抽象必不可少。但同时，编程语言能为代码复用提供多少技术支持也很重要。如果是用汇编语言编程，则再多的分解与抽象也将无用武之地。那么，我们应该如何评价一个编程语言的代码复用能力呢？
+
+*** 语言的复用性
+高级编程语言的两大基本要素是数据结构与算法。据此，我们可以将程序语言的代码复用分成四种情况：数据结构对数据结构的复用、数据结构对算法的复用，算法对数据结构的复用以及算法对算法的复用。这里所说甲对乙的复用，是指同样一段甲的代码，可以应用于多个不同的乙代码的情况。四种复用中，由于数据结构应用于多种算法是很自然的事情，无需多费笔墨，我们只讨论另外三种复用类型。
+
+#+BEGIN_SRC dot :file images/reuse.png
+digraph reuse 
+{
+  fontname="WenQuanYi Zen Hei";
+  node [shape=box, style=filled, fontname="WenQuanYi Zen Hei"];
+  edge [fontname="WenQuanYi Zen Hei", color=aquamarine4];
+
+  subgraph cluster_specific_reuse {
+    label="特定复用";
+    style=filled;
+    fillcolor=azure;
+    data_0 [label="数据结构", fillcolor=darkseagreen4];
+    algo_0 [label="算法", fillcolor=darkseagreen1];
+
+    data_0 -> data_0 [label="类的继承"];
+    algo_0 -> algo_0 [label="函数调用"];
+    algo_0 -> data_0 [label="纯虚类参数\n函数"];
+
+  }
+  subgraph cluster_generic_reuse {
+    label="非特定复用";
+    style=filled;
+    fillcolor=azure3;
+
+
+    data_1 [label="数据结构", fillcolor=deepskyblue4];
+    algo_1 [label="算法", fillcolor=deepskyblue1];
+
+    data_1 -> data_1 [label="类模板"];
+    algo_1 -> algo_1 [label="？"];
+    algo_1 -> data_1 [label="函数\n模板"];
+  }
+}
+
+#+END_SRC
+
+#+RESULTS:
+[[file:images/reuse.png]]
+
+即使是同一类型的复用，也可以继续细分为特定与非特定的两种复用机制。所谓特定的复用，是指同一段甲的代码只能复用于既定的若干乙的代码。例如面向对象的设计中，某个类与子类之间，就是数据结构对数据结构的特定复用关系；而以某个纯虚类为参数的函数，可以看做对该纯虚类的多个子类数据结构的特定复用。至于算法对算法的特定复用，函数间的调用是也。
+
+另一种更为普适的复用机制是非特定复用。当某段代码可以应用于不特定的另一种代码时，可称为非特定复用。不同语言实现非特定复用的方式不尽相同。以C++为例，模板是实现非特定复用的重要方式。以类型为模板参数的类模板和函数模板可以针对任意（满足要求）的数据类型生成新的类模板实例和函数模板实例，可分别称为数据结构对数据结构以及算法对数据结构的非特定复用。如[[src:pair_template]]所示的代码中，类模板 =pair= 可以生成针对任意类型的数据对类型，如[[src:cpp_swap]]中的函数模板 =swap= 可以生成针对任意数据类型交换两变量中数据的函数。
+#+CAPTION: C++的pair类模板
+#+NAME: src:pair_template
+#+BEGIN_SRC c++
+  template<typename T1, typename T2>
+  struct pair {T1 first; T2 second;};
+#+END_SRC
+
+在特定复用以及数据结构对数据结构和数据结构对算法两种非特定复用的实现机制上，Haskell与C++不相上下。区别在于Haskell不支持面向对象的设计，但是，但是同样可以。但在最后一种尚未详细讨论的复用机制——算法对算法的非特定复用上，两者区别明显。
+
+*** 算法对算法的非特定复用
