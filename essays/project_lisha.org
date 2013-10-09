@@ -147,56 +147,19 @@ Haskell的一大魅力在于，很多时候，我们可以轻易地将解题公�
 
 特定复用是编程语言的非常基本的功能。例如在定义某个复杂结构体时用到另一个结构体的定义，可归为数据结构间的特定复用；在函数中调用另一个函数则为算法间的特定复用；而在函数中利用某个复杂结构体保存数据或函数参数，则为算法特定复用数据结构。C++和Haskell都具备以上这些基本功能，因此，二者在特定复用上不分高下。
 
-非特定复用由于乙方代码不确定，显然其所代表的复用性要高于特定复用。任何特定复用都可以通过将乙方代码抽象而提升为非特定复用。所以，要比较语言的复用性，需要对其非特定复用功能着重讨论。
+特定复用是甲方与有限的若干乙方代码之间的复用关系，而非特定复用由于乙方代码不确定，是甲方与（理论上）无限的乙方代码之间的复用关系。任何特定复用都可以通过将乙方代码抽象而提升为非特定复用，所以，非特定复性所代表的复用性更高。要比较语言的复用性，需要对其非特定复用功能着重讨论。
 
-在C++中，数据结构对数据结构以及算法对数据结构的非特定复用是通过模板来实现的。
-#+BEGIN_SRC dot :file images/reuse.png
-digraph reuse 
-{
-  fontname="WenQuanYi Zen Hei";
-  node [shape=box, style=filled, fontname="WenQuanYi Zen Hei"];
-  edge [fontname="WenQuanYi Zen Hei", color=aquamarine4];
-
-  subgraph cluster_specific_reuse {
-    label="特定复用";
-    style=filled;
-    fillcolor=azure;
-    data_0 [label="数据结构", fillcolor=darkseagreen4];
-    algo_0 [label="算法", fillcolor=darkseagreen1];
-
-    data_0 -> data_0 [label="类的继承"];
-    algo_0 -> algo_0 [label="函数调用"];
-    algo_0 -> data_0 [label="纯虚类参数\n函数"];
-
-  }
-  subgraph cluster_generic_reuse {
-    label="非特定复用";
-    style=filled;
-    fillcolor=azure3;
-
-
-    data_1 [label="数据结构", fillcolor=deepskyblue4];
-    algo_1 [label="算法", fillcolor=deepskyblue1];
-
-    data_1 -> data_1 [label="类模板"];
-    algo_1 -> algo_1 [label="？"];
-    algo_1 -> data_1 [label="函数\n模板"];
-  }
-}
-
-#+END_SRC
-
-#+RESULTS:
-[[file:images/reuse.png]]
-
-
-另一种更为普适的复用机制是非特定复用。当某段代码可以应用于不特定的另一种代码时，可称为非特定复用。不同语言实现非特定复用的方式不尽相同。以C++为例，模板是实现非特定复用的重要方式。以类型为模板参数的类模板和函数模板可以针对任意（满足要求）的数据类型生成新的类模板实例和函数模板实例，可分别称为数据结构对数据结构以及算法对数据结构的非特定复用。如[[src:pair_template]]所示的代码中，类模板 =pair= 可以生成针对任意类型的数据对类型，如[[src:cpp_swap]]中的函数模板 =swap= 可以生成针对任意数据类型交换两变量中数据的函数。
-#+CAPTION: C++的pair类模板
-#+NAME: src:pair_template
+在C++中，数据结构对数据结构以及算法对数据结构的非特定复用是分别通过以类型为参数的类模板和函数模板实现的。乙方的数据结构被抽象成模板的类型参数，从而任何满足模板的隐含要求的类型都可以应用于甲方模板而生成对应的模板实例。如[[src:cpp_template]]所示的代码中，类模板 =pair= 可以生成针对任意类型的数据对类型，函数模板 =average= 返回任意数据类型的两个数的平均值。利用 =average= 模板可以计算整数、浮点数、复数或者有理数的平均值。
+#+CAPTION: C++的类模板与函数模板
+#+NAME: src:cpp_template
 #+BEGIN_SRC c++
   template<typename T1, typename T2>
   struct pair {T1 first; T2 second;};
+  
+  template<typename T>
+  T average(T const &v1, T const &v2) {return (v1 + v2) / T(2);}
 #+END_SRC
+
 
 在特定复用以及数据结构对数据结构和数据结构对算法两种非特定复用的实现机制上，Haskell与C++不相上下。区别在于Haskell不支持面向对象的设计，但是，但是同样可以。但在最后一种尚未详细讨论的复用机制——算法对算法的非特定复用上，两者区别明显。
 
