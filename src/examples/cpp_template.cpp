@@ -21,5 +21,7 @@ int main()
   std::cout << sqsum(pair_ii.first, pair_ii.second)
             << std::endl;
 
+  std::cout << sqsum(std::string("abc"), std::string("def")) << std::endl;
+
   return 0;
 }
