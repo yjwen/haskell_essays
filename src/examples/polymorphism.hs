@@ -6,7 +6,7 @@ data Pair a b = Pair {
 
 -- 计算任意数字类型的平方和
 sqsum :: Num a => a -> a -> a -- sqsum的类型定义
-sqsum a b = a * a + b * b     -- sqsum的实现
+sqsum x y = x * x + y * y     -- sqsum的实现
 
 main = do
   let pair = Pair 15 16
