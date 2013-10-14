@@ -208,12 +208,30 @@ using namespace std;
 string apply_on_pair(string (*func)(string const &, string const &),
                      string const &a, string const &b);
 #+END_SRC
-这种将变量名（ =func= ）隐藏于其类型声明之中的语法实在有违为常人的思维习惯。为使代码易于理解，C++的程序员通常用 =typedef= 为函数类型赋名。于是，以上代码可以写成：
+这种将变量名（ =func= ）隐藏于其类型声明之中的语法实在有违为常人的思维习惯。为使代码易于理解，C++的程序员通常用 =typedef= 为函数类型赋名。于是，以上代码可以改写成：
 #+BEGIN_SRC c++
 using namespace std;
 typedef string (*str_func_type)(string const &, string const &);
 string apply_on_pair(str_func_type func,
                      string const &a, string const &b);
 #+END_SRC
-这样一来，函数定义是好理解了。不过，类型定义呢？更何况，当指针类型与模板参数相结合时，情况变得更糟。如果要声明一个接受任意类型两个值并返回同类型值的函数为参数的函数模板时，
+这样一来，函数定义是好理解了。不过，类型定义呢？更何况，当指针类型与模板参数相结合时，情况变得更糟。如果要声明一个接受任意类型两个值并返回同类型值的函数为参数的函数模板时，由于函数类型依赖于模板参数，我们无法直接用 =typedef= 为其预先赋名，只能先预定义一个求出类型的元函数（一种完全用于类型推导的类模板），再利用该元函数“求得”函数指针类型，如下例所示：
+#+CAPTION: 用元函数推导函数指针类型
+#+Name: src:function_pointer
+#+BEGIN_SRC c++
+  // 返回函数指针类型的元函数
+  template<typename T>
+  struct func_type
+  {
+      //类型result是元函数的返回类型
+      typedef T (*result)(T const&, T const&);
+  };
+  
+  template<typename T>
+  T apply_on_pair(typename func_type<T>::result func,
+                  // 利用元函数得到函数指针类型
+                  T const& a, T const& b);
+#+END_SRC
+
+虽然C++还有诸如函数指针类型的模板参数等机制以支持算法的非特定复用，在此不再深入。仅以上示例就已经可以说明，在C++中实现算法间的复用需要对模板技巧有所了解，其代码也显得较繁琐。这无形中提高了算法复用的门槛，将众多并不完全了解C++程序员挡在门外。
 
