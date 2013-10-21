@@ -17,20 +17,15 @@ T0 chain(T0 (*func0)(T1),
   return func0(func1(v));
 }
 
-double root3(int v) {return pow(v, -3);}
-double root4(int v) {return pow(v, -4);}
-
-std::string double_to_string(double v)
-{
-  std::ostringstream oss;
-  oss << v;
-  return oss.str();
-}
+using namespace std;
+bool is_odd(int v) {return v % 2 == 1;}
+bool is_even(int v) {return v % 2 == 0;}
+string bool_to_string(bool v) {return string(v ? "true" : "false");}
 
 void test_chain()
 {
-  std::cout << chain(double_to_string, root3, 3) << std::endl
-            << chain(double_to_string, root4, 3) << std::endl;
+  std::cout << chain(bool_to_string, is_odd, 3) << std::endl
+            << chain(bool_to_string, is_even, 3) << std::endl;
 }
 int main()
 {
