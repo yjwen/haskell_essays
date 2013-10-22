@@ -17,9 +17,9 @@ T0 chain(T0 (*func0)(T1),
   return func0(func1(v));
 }
 
-using namespace std;
 bool is_odd(int v) {return v % 2 == 1;}
 bool is_even(int v) {return v % 2 == 0;}
+using namespace std;
 string bool_to_string(bool v) {return string(v ? "true" : "false");}
 
 void test_chain()
