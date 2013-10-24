@@ -55,8 +55,8 @@ void test_chain()
 
   // 将打印字符串"true"
   std::cout << is_even_str(4) << std::endl;
-
 }
+
 int main()
 {
   test_chain();
