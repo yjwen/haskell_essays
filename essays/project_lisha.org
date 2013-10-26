@@ -194,7 +194,7 @@ Haskell对多态的处理要更为严谨。在[[src:hs_polymorphism]]中的 ~sqs
 #+BEGIN_SRC haskell
 sqsum "abc" "def"
 #+END_SRC
-由于 ~"abc"~ 和 ~"def"~ 的类型 ~String~ (即字符串类型)不是 ~Num~ 类型族的成员，编译器将直接报错，指出该错误，而不用像C++的编译器那样直到编译乘法和加法表达式时才发现有错，而给出误导的报错信息。
+由于 "abc" 和 "def" 的类型 ~String~ (即字符串类型)不是 ~Num~ 类型族的成员，编译器将直接报错，指出该错误，而不用像C++的编译器那样直到编译乘法和加法表达式时才发现有错，而给出误导的报错信息。
 
 可见，由于类型族的存在，Haskell的泛型编程机制要比C++更为完善。从代码复用的角度审视，在对数据类型的非特定复用上，Haskell要略胜于C++。但这只是二者在代码复用差距中的一小部分。更为显著的差距，出现在我们尚未讨论过的算法对算法的非特定复用上。
 
@@ -202,7 +202,7 @@ sqsum "abc" "def"
 算法间的两种复用可以说是处在代码复用发展道路的两极上。早在汇编语言时代，算法间的特定复用，即已知函数之间的相互调用，就已经是寻常功能了。非特定复用，即在函数中调用不特定的其他函数，则一直作为一种较为高级的语言特性，不在众多现代编程语言的“常所用挌虎大戟”之列。
 [[file:images/halberd.jpg]]
 
-在对数据结构的非特定复用中，无论是C++和Haskell都必须提供某种形式的参数以指代所复用的数据结构。C++中是类型模板参数，Haskell中是类型符号。同样，在对算法的非特定复用中，也需要某种参数以指代所复用的算法。
+在对数据结构的非特定复用中，无论是C++和Haskell都必须提供某种形式的参数以指代所复用的数据结构。在C++中是类型模板参数，Haskell中是类型符号。同样，在对算法的非特定复用中，也需要某种参数以指代所复用的算法。
 
 **** C++的函数指针
 C++是以函数指针来指代所复用的算法，即某个函数。C++声明函数指针类型的语法颇为怪异，例如以下的代码将声明一个函数指针类型 ~func_ptr_type~ 。
@@ -235,35 +235,24 @@ C++是以函数指针来指代所复用的算法，即某个函数。C++声明�
 
 我们花费了如此多的篇幅讨论C++中的算法复用机制，实在是因为它太过于复杂，以至于对于不少C++程序员来说，在日常工作中，罕有甚至从未尝试过算法复用。
 
-**** Haskell的闭包
-与C++形成鲜明对比的是，Haskell中的算法复用如同其符号绑定般普通。函数是Haskell中的“一等公民”，也就是说可以将函数做为一种“值”与符号或者其他函数的参数绑定。所以，如[[src:cpp_func_ptr]]中的 ~chain~ 函数模板那样，实现连锁调用两个函数的多态函数在Haskell中的实现只需两行：
-#+BEGIN_SRC haskell
-chain :: (b -> c) -> (a -> b) -> a -> c
-chain func0 func1 v = func0 (func1 v)
-#+END_SRC
-
-
-
-，对算法的非特定复用是通过函数指针结合模板来实现的，但声明函数指针类型的语法之怪异足以对C++的函数复用产生负面影响。比如以下代码，其实是声明了一个函数 =apply_on_pair= ，其第一个参数 =func= 是一个接受两个字符串的值并返回另一字符串值的函数。
-#+BEGIN_SRC c++
-using namespace std;
-string apply_on_pair(string (*func)(string const &, string const &),
-                     string const &a, string const &b)
-{
-  return func(a, b);
-}
-#+END_SRC
-这种将变量名（ =func= ）隐藏于其类型声明之中的语法实在有违为常人的思维习惯。为使代码易于理解，C++的程序员通常用 =typedef= 为函数类型赋名。于是，以上代码可以改写成：
-#+INCLUDE: "../src/examples/function_pointer.cpp" src c++ :lines "4-11"
-这样一来，函数定义是好理解了。不过，类型定义呢？更何况，当指针类型与模板参数相结合时，情况变得更糟。如果要声明一个接受任意类型两个值并返回同类型值的函数为参数的函数模板时，由于函数类型依赖于模板参数，我们无法直接用 =typedef= 为其预先赋名，只能先预定义一个求出类型的元函数（一种完全用于类型推导的类模板），再利用该元函数“求得”函数指针类型，如[[src:function_pointer]]所示：
-#+CAPTION: 用元函数推导函数指针类型
-#+Name: src:function_pointer
-#+INCLUDE: "../src/examples/function_pointer.cpp" src c++ :lines "12-27"
-
-C++还有诸如函数指针类型的模板参数等机制以支持算法的非特定复用，在此不再深入。仅以上示例就已经可以说明，在C++中实现算法间的复用需要对模板技巧有所了解，其代码也显得较繁琐。这无形中提高了算法复用的门槛，将众多并不完全了解C++的程序员挡在门外。
-
-Haskell作为一门函数式编程语言，对函数间复用的支持要比C++简便得多，也丰富得多。在Haskell中，函数是“一等公民”，可以直接作为与符号或者函数参数绑定。函数类型的声明也比C++更为直观。在Haskell中实现多态的 =apply_on_pair= 函数的代码如[[src:hs_func_param]]所示。
-#+CAPTION: Haskell的函数参数类型声明
-#+NAME: src:hs_func_param
+**** Haskell的箭头
+与C++形成鲜明对比的是，Haskell中的算法复用如同其符号绑定般普通。函数是Haskell中的“一等公民”，也就是说可以将函数做为一种“值”与符号或者其他函数的参数绑定。所以，如[[src:cpp_func_ptr]]中的 ~chain~ 函数模板那样，实现连锁调用两个函数的多态函数在Haskell中的实现只需两行，如[[src:hs_chain]]所示。
+#+CAPTION: Haskell中的 ~chain~ 函数
+#+NAME: src:hs_chain
 #+INCLUDE: "../src/examples/functional.hs" src haskell :lines "1-3"
-之前已经提过，Haskell中函数的类型声明的形式为： ~参数类型1->参数类型2->...->返回类型~ 。如果某个参数本身是函数，那么需要用括号将该参数的类型嵌入到函数类型声明中。
+第一行是 ~chain~ 的类型声明。在讨论Haskell的[[泛型编程][泛型编程]]时已经介绍过，函数的类型声明形式为 ~参数1->参数2->...->返回值类型~ 。在本例中， ~chain~ 函数的前两个参数本身也是函数，其类型也是 ~a->b~ 的形式。为避免混淆，我们需要用括号将其从 ~chain~ 的类型声明中分隔出来。第二行是 ~chain~ 的实现，其中连锁调用 ~func1~ 与 ~func0~ 于参数 ~v~ 以得到返回值。相应地，在Haskell中所实现的 ~is_odd~ 、 ~string_to_bool~ 以及其应用于 ~chain~ 的代码如[[src:hs_is_odd_string]]所示。
+#+CAPTION: Haskell中的算法复用
+#+NAME: src:hs_is_odd_string
+#+INCLUDE: "../src/examples/functional.hs" src haskell :lines "4-13"
+
+表面上， ~chain~ 函数也只是实现了两个函数的连锁调用并返回所得值，并没有返回一个能连锁调用的函数。按照之前的讨论，这不是一种闭合的复用，无法再进行算法复用。其实不然，利用 ~chain~ 实现三个函数的连锁调用也异常简单，如[[src:hs_closed_reuse]]的代码所示。
+#+CAPTION: Haskell中的闭合复用
+#+NAME: src:hs_closed_reuse
+#+INCLUDE: "../src/examples/functional.hs" src haskell :lines "14-19"
+这段代码的关键在于括号中的 ~chain~ 的应用方式。完全的应用 ~chain~ 需要三个参数，两个函数及一个数值。但这里的 ~chain~ 只应用于两个参数，并不是一个完整的应用。这种不完全的应用实际上返回了一个函数，该函数可以继续应用于剩余参数，直至参数补全后返回完全应用 ~chain~ 所得到的值。所以，在Haskell中，如下的代码是完全合法的：
+#+BEGIN_SRC haskell
+f  = chain invert -- chain invert
+f1 = f is_odd     -- chain invert is_odd
+v  = f1 4         -- chain invert is_odd 4 = True
+#+END_SRC
+
