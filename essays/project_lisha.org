@@ -1,4 +1,4 @@
-#+TITLE: 项目名：LisHa
+q#+TITLE: 项目名：LisHa
 #+LANGUAGE: zh-CN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
 #+OPTIONS: html-preamble:"Haskell漫谈集"
@@ -249,10 +249,6 @@ C++是以函数指针来指代所复用的算法，即某个函数。C++声明�
 #+CAPTION: Haskell中的闭合复用
 #+NAME: src:hs_closed_reuse
 #+INCLUDE: "../src/examples/functional.hs" src haskell :lines "14-19"
-这段代码的关键在于括号中的 ~chain~ 的应用方式。完全的应用 ~chain~ 需要三个参数，两个函数及一个数值。但这里的 ~chain~ 只应用于两个参数，并不是一个完整的应用。这种不完全的应用实际上返回了一个函数，该函数可以继续应用于剩余参数，直至参数补全后返回完全应用 ~chain~ 所得到的值。所以，在Haskell中，如下的代码是完全合法的：
-#+BEGIN_SRC haskell
-f  = chain invert -- chain invert
-f1 = f is_odd     -- chain invert is_odd
-v  = f1 4         -- chain invert is_odd 4 = True
-#+END_SRC
+这段代码的关键在于括号中的 ~chain~ 的应用方式。完全的应用 ~chain~ 需要三个参数——两个函数及一个数值。但这里的 ~chain~ 只应用于两个参数，并不是一个完整的应用。这种不完全的应用实际上返回了一个函数，该函数可以继续应用于剩余参数，直至参数补全后返回完全应用 ~chain~ 所得到的值。
 
+这也是Haskell的函数类型声明中并不区分参数类型与返回值类型，统一用箭头符（ ~->~ ）连接的原因。在概念上，Haskell中的函数与 \lambda 算子性质相同，都是单输入单输出的函数。不过，无论是输入还是输出都可以是某种函数。所谓多个参数的函数，其实是一个单输入并返回一个函数的函数。如某函数 ~f~ 的类型为 ~f::a->b->c~ ，则 ~f~ 只有一个 ~a~ 类型的参数，并返回一个 ~b->c~ 的函数。将 ~f~ 应用于 ~a~ 类型值 ~x~ 和 ~b~ 类型值 ~y~ 并得到 ~c~ 类型值 ~z~ 的具体过程应为： 首先 ~f x~ 得到一个 ~b->c~ 类型的函数，记为 ~g~ ；再将 ~g~ 应用于 ~y~ 从而得到返回值 ~z~ 。
