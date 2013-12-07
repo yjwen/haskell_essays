@@ -1,0 +1,17 @@
+#+TITLE: 引子
+#+STARTUP: content
+#+LANGUAGE: zh-CN
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+OPTIONS: html-preamble:lisha-preamble html-postamble:nil toc:nil
+
+#+HTML_NAVI: ((:t "下一篇：为什么选择Haskell" :a "lisha_1.html"))
+
+  2013年9月10日，这一天是教师节，但对于一个程序员来说却没有什么特别。我坐在工位上一边翻看着软件的运行日志，一边构思着如何用Haskell实现对日志信息的自动解析，一边刷着微博。突然一条微博推荐的文章引起了我的兴趣。这篇文章(在[[http://norvig.com/lispy.html][这里]]）讲解如何利用Python实现一个简单Lisp语言解释器。印象中已经不止一次看到用某某语言实现Lisp/Scheme解释器的文章。大概因为Lisp语法简洁，又具备程序语言的基本要素，所以才被众多程序员拿来练手。
+
+因为这篇文章的启发，正在学习Haskell的我，也有了利用Haskell实现Lisp解释器的想法。虽然Haskell版的Lisp解释器早已有之（比如[[http://www.defmacro.org/ramblings/lisp-in-haskell.html][这里]]），但我也不妨“重走一遍长征路”，以借机将已学的Haskell技术再回味琢磨一番，并在开发过程中发现问题，继续探索未知的领域。毕竟，学习一门语言，无论是自然语言还是计算机语言，最重要的都是实践。实践出真知。所以，就这么决定了，我来实现一个Haskell版的Lisp解释器。
+
+Lisp是一门古老的语言，诞生于1958年，是现今还在广泛使用的高级语言之中的第二高龄[fn:wiki_lisp]。Lisp同时也是一个语言大家庭，在其一个甲子有余的演化过程中，衍生出众多方言，例如现在正在默默支持我写作的Emacs Lisp，以及作为通用语言而更为广泛使用的Common Lisp和Scheme。三者中，Scheme语法最为简练，也是众多Lisp解释器的首选。我的Lisp解释器也不例外，就以Scheme为目标语言。
+
+现在是时候给项目起个名字了。既然是以Haskell实现Lisp解释器，就将Lisp与Haskell两个词合并，项目名就叫LisHa。
+
+[fn:wiki_lisp] 据维基百科[[http://en.wikipedia.org/wiki/Lisp_(programming_language)][Lisp词条]]，另第一高龄是Fortran。

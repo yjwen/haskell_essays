@@ -1,0 +1,15 @@
+#+TITLE: 为什么选择Haskell
+#+STARTUP: content
+#+LANGUAGE: zh-CN
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+OPTIONS: html-preamble:lisha-preamble html-postamble:nil toc:nil
+
+#+HTML_NAVI: ((:t "上一篇：引子" :a "lisha_0.html") (:t "下一篇：Haskell更抽象" :a "lisha_1_1.html"))
+
+在浸淫于C++编程工作许多年之后，我对这门语言已经有些审美疲劳。因为正如Stroustrup教授在2013年度Going Native大会上所说，C++是”一门轻量级抽象的编程语言“[fn:cpp]，所以，编写C++程序时总是要考虑语句是如何反映到硬件操作尤其是对内存的操作上的。这固然使得C++编译出的程序的运行效率可以和C媲美，但另一方面，也使得程序员须花大量精力考虑算法在硬件平台上的具体实现，而不能专注于算法本身，同时，也使得C++程序易于出错，难于调试。我希望能找到一门更抽象更精练的语言来换换口味。
+
+除了C++，Python和Tcl也是我的常用编程语言。刚开始学习Python时，其清爽的语法和特色鲜明的缩进式排版都曾使我眼前一亮。但是，也许是我学艺不精，没有领会Python的精髓，在使用Python编程一段时间以后，我感觉虽然其语法非常简练，却仍然需要在设计算法时关心数据在内存中的存取。除了一些语法糖之外，本质上和C++没什么差别。至于Tcl，我无话可说。
+
+有没有比C++和Python更加抽象的语言呢？带着这个问题，我把目光投向了一个陌生的领域——函数式编程，开始学习Haskell。函数式编程语言众多，而我之选择Haskell，纯粹是因为其据称是最具发展潜力的函数式编程语言。不管怎样，在学习了一段时间之后，我感觉Haskell正是我所寻找的那个语言。与C++及Python相比，Haskell代码更精练，用其编程时的思维方式更加抽象，同时程序更易维护。并且，Haskell于我还有一个独特的魅力，在于其更有潜力成为一种软硬兼顾的语言。有关Haskell的这些特点，且让我慢慢道来。
+
+[fn:cpp] 英文原文“a light-weight abstraction programming language”。
