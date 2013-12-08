@@ -1,8 +1,9 @@
 #+TITLE: 为什么选择Haskell 之一 Haskell更抽象
+#+AUTHOR: 温宇杰
 #+STARTUP: content
 #+LANGUAGE: zh-CN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
-#+OPTIONS: html-preamble:lisha-preamble html-postamble:nil toc:nil
+#+OPTIONS: html-preamble:lisha-preamble toc:nil
 
 #+HTML_NAVI: ((:t "上一篇：为什么选择Haskell" :a "lisha_1.html") (:t "下一篇：Haskell更易复用" :a "lisha_1_2.html"))
 

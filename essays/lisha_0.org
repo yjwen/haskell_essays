@@ -1,8 +1,9 @@
 #+TITLE: 引子
+#+AUTHOR: 温宇杰
 #+STARTUP: content
 #+LANGUAGE: zh-CN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
-#+OPTIONS: html-preamble:lisha-preamble html-postamble:nil toc:nil
+#+OPTIONS: html-preamble:lisha-preamble toc:nil
 
 #+HTML_NAVI: ((:t "下一篇：为什么选择Haskell" :a "lisha_1.html"))
 

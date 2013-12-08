@@ -1,0 +1,8 @@
+#+TITLE: 为什么选择Haskell 之二 Haskell软硬兼顾的可能性
+#+AUTHOR: 温宇杰
+#+STARTUP: content
+#+LANGUAGE: zh-CN
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+OPTIONS: html-preamble:lisha-preamble toc:nil
+
+尚未完成。

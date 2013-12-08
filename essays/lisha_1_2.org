@@ -1,8 +1,9 @@
 #+TITLE: 为什么选择Haskell 之二 Haskell代码更易复用
+#+AUTHOR: 温宇杰
 #+STARTUP: content
 #+LANGUAGE: zh-CN
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
-#+OPTIONS: html-preamble:lisha-preamble html-postamble:nil toc:nil
+#+OPTIONS: html-preamble:lisha-preamble toc:nil
 
 #+HTML_NAVI: ((:t "上一篇：Haskell更抽象" :a "lisha_1_1.html") (:t "下一篇：Haskell软硬兼顾的可能性" :a "lisha_1_3.html"))
 
@@ -27,21 +28,41 @@
 C++的泛型编程是通过以类型为参数的类模板和函数模板实现的。乙方的数据结构被抽象成模板的类型参数，从而任何满足模板的隐含要求的类型都可以应用于甲方的模板代码而生成对应的模板实例。如[[src:cpp_template]]所示的代码中，类模板 =pair= 可以生成针对任意类型的数据对类型，函数模板 =sqsum= 返回任意类型的两个数的平方和。 =sqsum= 模板可用于计算整数、浮点数、复数或者有理数的平方和。
 #+CAPTION: C++的类模板与函数模板
 #+NAME: src:cpp_template
-#+INCLUDE: "../src/examples/cpp_template.cpp" src c++ :lines "2-13"
+#+BEGIN_SRC c++ 
+// 定义一个保存任意两种类型数据的数据对类模板
+// T1, T2是模板参数，指代待保存数据的类型
+template<typename T1, typename T2>
+struct pair {T1 first; T2 second;};
+
+// 定义针对任意类型数据的求平方和的函数
+// T是模板参数，指代待比较的数据的类型
+template<typename T>
+T sqsum(T const &v1, T const &v2) {return v1 * v1 + v2 * v2;}
+#+END_SRC
 
 Haskell拥有一种与C++模板类似的机制——多态（Polymorphism）。如果一个类型定义中带有参数，则该类型是一个多态类型，参数指代另一种类型。如果一个函数的类型定义（函数的类型由其输入参数类型及返回值类型决定）中包含参数，则函数是一个多态函数。[[src:hs_polymorphism]]的代码演示了在Haskell中如何利用多态定义与[[src:cpp_template]]类似的泛型数据结构与算法。
 #+CAPTION: Haskell的多态类型与函数
 #+NAME: src:hs_polymorphism
-#+INCLUDE: "../src/examples/polymorphism.hs" src haskell :lines "0-11"
+#+BEGIN_SRC haskell 
+-- 可以保存任意类型数据的多态类型Pair
+data Pair a b = Pair {
+  first :: a,
+  second :: b
+  }
+
+-- 计算任意数字类型的平方和
+sqsum :: Num a => a -> a -> a -- sqsum的类型定义
+sqsum x y = x * x + y * y     -- sqsum的实现
+#+END_SRC
 
 这样看来，似乎Haskell与C++在泛型编程上不相上下。但依愚见，Haskell要略胜一筹。
 
 C++的模板机制有一个很恼人的缺陷，就是缺乏模板对类型参数要求的成文描述。在[[src:cpp_template]]中的平方和函数 =sqsum= 中要对两个函数参数做乘法和加法，这实际上要求函数参数的类型，即模板的类型参数，必须支持乘法和加法运算，否则将会编译出错。但是，由于模板的参数都只是用关键字 =typename= 标识，根本无法反映如上的函数对模板参数的隐含要求。这将导致编译器无法在早期锁定错误，也无法在编译出错时给出正确的错误原因。例如，我们将 =std::string= 值（即字符串）传给 =sqrt= 函数参数时（如[[src:cpp_wrong_concept]]所示），GCC 4.6.4将给出如下的报错信息，示意错误在函数模板中，而不在调用函数模板时。
 #+CAPTION: 不满足模板隐含要求的参数类型
 #+NAME: src:cpp_wrong_concept
-#+BEGIN_SRC c++
-  // std::string类型不能进行乘法和加法运算。
-  std::cout << sqsum(std::string("abc"), std::string("def")) << std::endl;
+#+BEGIN_SRC c++ 
+// std::string类型不能进行乘法和加法运算。
+std::cout << sqsum(std::string("abc"), std::string("def")) << std::endl;
 #+END_SRC
 
 #+CAPTION: GCC的含混报错信息
@@ -56,13 +77,27 @@ cpp_template.cpp:11:58: 错误： ‘operator*’在‘v1 * v1’中没有匹配
 虽然C++界内曾经尝试为模板参数增加成文的要求，但这一提案最终被最新标准C++11排除在外，似乎也不在C++14的草案之中。那么，C++模板的这一痼疾在近期治愈无望。
 
 Haskell对多态的处理要更为严谨。在[[src:hs_polymorphism]]中的 ~sqsum~ 函数中，为了声明这是一个多态函数，我们必须为该函数添加类型声明：
-#+INCLUDE: "../src/examples/polymorphism.hs" src haskell :lines "7"
+#+BEGIN_SRC haskell 
+-- 可以保存任意类型数据的多态类型Pair
+data Pair a b = Pair {
+  first :: a,
+  second :: b
+  }
+
+-- 计算任意数字类型的平方和
+sqsum :: Num a => a -> a -> a -- sqsum的类型定义
+sqsum x y = x * x + y * y     -- sqsum的实现
+
+main = do
+  let pair = Pair 15 16
+  putStrLn $ show $ sqsum (first pair) (second pair)
+#+END_SRC
 声明中的 ~a~ 是类型符号， ~a->a->a~ 声明函数类型为接受任意 ~a~ 类型的两个参数并返回一个 ~a~ 类型值（其中另有玄机，暂且不论）。这个 ~sqsum~ 函数中同样需要对 ~a~ 类型的参数 ~x~ 和 ~y~ 作乘法和加法运算。为了体现函数对类型的要求，我们必须在类型声明之前添加 ~Num a =>~ ，这个声明约束类型 ~a~ 必须是类型族（type class） ~Num~ 的一员。 ~Num~ 是Haskell中预定义的类型族，族中都是可以进行加、减、乘、求负数、求符号运算的类型。满足要求的Haskell预定义类型也已经是该族成员。如果要将自定义类型加入该族，就必须为类型提供族所要求的运算函数。另外，Haskell也允许自定义类型族。
 
 类型族从两方面防止了C++模板的痼疾在Haskell中出现。一方面，在多态函数中，如果某个符号类型由类型符号决定，则只可将约束该符号类型的类型族中定义的函数（加、减等等运算符也是函数）应用于该符号。如果某个类型符号不受任何类型族约束，则以之为类型的符号不能进行任何函数运算。如果将[[src:hs_polymorphism]]中 ~sqsum~ 的类型族约束 ~Num a~ 删除，则GHC编译该代码时将报错，指出不能将 ~x~ 和 ~y~ 应用于 ~Num~ 类型族的运算 ~+~ 。这一提示非常明确，足够程序员精准定位错误所在并改正。
 
 另一方面，在将多态函数应用于某个类型的值时，编译器也会检查该类型是否是对应类型族的成员。例如将 ~sqsum~ 应用于两个字符串时：
-#+BEGIN_SRC haskell
+#+BEGIN_SRC haskell 
 sqsum "abc" "def"
 #+END_SRC
 由于 "abc" 和 "def" 的类型 ~String~ (即字符串类型)不是 ~Num~ 类型族的成员，编译器将直接报错，指出该错误，而不用像C++的编译器那样直到编译乘法和加法表达式时才发现有错，而给出误导的报错信息。
@@ -77,20 +112,45 @@ sqsum "abc" "def"
 
 ** C++的函数指针
 C++是以函数指针来指代所复用的算法，即某个函数。C++声明函数指针类型的语法颇为怪异，例如以下的代码将声明一个函数指针类型 ~func_ptr_type~ 。
-#+BEGIN_SRC c++
-  typedef int (*func_ptr_type)(char, double);
-  // 声明func_ptr_type是一个函数指针类型，只能指向接受两个char和double类
-  // 型参数且返回int值的函数。
+#+BEGIN_SRC c++ 
+typedef int (*func_ptr_type)(char, double);
+// 声明func_ptr_type是一个函数指针类型，只能指向接受两个char和double类
+// 型参数且返回int值的函数。
 #+END_SRC
 从代码中可以看出，函数指针类型中已经包含了对函数参数个数、类型以及返回值类型的约束信息。所以，某种类型的函数指针只能指向特定参数类型和数目以及返回值类型的函数。将函数指针与模板的类型参数相结合，在C++中可以写出针对不同参数类型的函数的复用代码，但仍然要求函数参数数目固定。例如[[src:cpp_func_ptr]]中所示的函数模板 ~chain~ ，对于任意两个单参数函数 ~func0~ 和 ~func1~ ，只要满足 ~func1~ 的返回值与 ~func0~ 的参数值类型相同，就对某个 ~func1~ 的参数类型的值，返回连锁调用 ~func1~ 及 ~func0~ 所得到的值。
 #+CAPTION: C++函数指针
 #+NAME: src:cpp_func_ptr
-#+INCLUDE: "../src/examples/function_pointer.cpp" src c++ :lines "6-19"
+#+BEGIN_SRC c++ 
+template<typename T0,
+         typename T1,
+         typename T2>
+T0 chain(T0 (*func0)(T1),
+//            ^^^^^声明func0是一个函数指针，指
+// 向有一个T1型参数并返回一个T0型值的函数
+         T1 (*func1)(T2),
+//            ^^^^^类似func0，也是一个函数指针
+// 指向有一个T2型参数并返回一个T1型值的函数
+         T2 const &v)
+{
+  return func0(func1(v));
+}
+#+END_SRC
 
 假如我们有函数 ~is_odd~ 和 ~is_even~ 分别判断某个整数是否为奇数及偶数并返回对应的布尔值，又有函数 ~bool_to_string~ 返回布尔值对应的字符串表示，那么借助 ~chain~ 函数模板，我们可以复用以上三个函数而分别实现判断整数是否为奇数和偶数并返回对应字符串的函数，如[[src:cpp_func_reuse]]所示。
 #+CAPTION: 复用函数以实现新功能
 #+NAME: src:cpp_func_reuse
-#+INCLUDE: "../src/examples/function_pointer.cpp" src c++ :lines "20-30"
+#+BEGIN_SRC c++ 
+bool is_odd(int v) {return v % 2 == 1;}
+bool is_even(int v) {return v % 2 == 0;}
+using namespace std;
+string bool_to_string(bool v) {return string(v ? "true" : "false");}
+
+void test_chain()
+{
+  std::cout << chain(bool_to_string, is_odd, 3) << std::endl
+            << chain(bool_to_string, is_even, 3) << std::endl;
+}
+#+END_SRC
 
 但这种直接调用函数指针的方式对代码复用的贡献非常有限。如果要实现三个函数之间的连锁调用，则我们需要另外写一个 ~chain3~ 函数模板，而不能复用已有的 ~chain~ 。要实现最大限度的算法复用，我们需要有一种“闭合”的函数复用机制，即根据已有的函数生成新的函数。这样，新生成的函数才有可能再利用现有的函数复用机制继续生成新函数，从而提高代码的复用性。要做到这一点，新生成的函数中需要保留其所复用的函数指针以及调用复用函数时所需的参数等等，这一功能是函数指针无法胜任的。
 
@@ -100,7 +160,61 @@ C++是以函数指针来指代所复用的算法，即某个函数。C++声明�
 但是，由于C++对涉及函数类型的泛型编程支持非常有限，利用函数对象实现对算法的复用的代码非常繁琐，通常要在函数对象内按照约定重定义函数的参数类型及返回值类型，还要实现将函数指针封装成函数对象的封装类，以及为方便生成函数对象而实现的助手函数。虽然，在新标准C++11中引入了可以当场生成匿名函数对象的 \lambda 函数机制，简化了被复用方的生成代码，却使得复用方要同时考虑函数指针、普通函数对象以及 \lambda 函数对象三种情况，代码更加晦涩难懂。[[src:cpp_closed_reuse]]的代码演示了利用C++11的新特性实现闭合函数复用以及复用 ~chain~ 实现三个函数的连锁调用的方法。
 #+CAPTION: C++中的闭合函数复用
 #+NAME: src:cpp_closed_reuse
-#+INCLUDE: "../src/examples/function_object.cpp" src c++ :lines "6-59"
+#+BEGIN_SRC c++ 
+// 提取函数对象返回值的元函数
+template<typename T>
+struct function_traits
+{
+  typedef decltype(&T::operator()) operator_type;
+  typedef typename function_traits<operator_type>::return_type return_type;
+};
+
+template<typename R, typename C, typename... A>
+struct function_traits<R (C::*)(A...)>
+{
+  typedef R return_type;
+};
+// 元函数到此结束
+
+// 连锁调用两个单参数函数的函数对象
+template<typename Func0,        // Func0与Func1为所调用的函数对象类型。
+         typename Func1>
+struct chain_func
+{
+  // 利用元函数提取出Func0的返回值类型
+  typedef typename function_traits<Func0>::return_type return_type;
+  Func0 func0;                  // 所复用的函数对象
+  Func1 func1;
+  chain_func(Func0 func0, Func1 func1) : func0(func0), func1(func1) {}
+  // 重载的括号操作符，连锁调用func1与func0
+  template<typename T>
+  return_type operator() (T v) {return func0(func1(v));}
+};
+
+// 生成连锁调用函数对象的助手函数模板
+template<typename Func0, typename Func1>
+chain_func<Func0, Func1> chain(Func0 func_ptr0, Func1 func_ptr1)
+{
+  return chain_func<Func0, Func1>(func_ptr0, func_ptr1);
+}
+
+void test_chain()
+{
+  // 利用C++11中的lambda函数生成函数对象
+  auto is_odd = [](int v) mutable {return v % 2 == 1;};
+  auto invert = [](bool v) mutable {return !v;};
+  auto bool_to_string = [](bool v) mutable {
+    return std::string(v ? "true" : "false");
+  };
+
+  // 用两次chain生成三个函数对象的连锁调用函数。
+  auto is_even = chain(invert, is_odd);
+  auto is_even_str = chain(bool_to_string, is_even);
+
+  // 将打印字符串"true"
+  std::cout << is_even_str(4) << std::endl;
+}
+#+END_SRC
 
 总之，在C++中，无论是实现还是使用闭合的函数复用代码，都必须对函数指针、类型推导以及元编程等高级特性有所了解才行，这也大大限制了函数复用在C++中的广泛使用。
 
@@ -110,34 +224,53 @@ C++是以函数指针来指代所复用的算法，即某个函数。C++声明�
 与C++形成鲜明对比的是，Haskell中的算法复用如同其符号绑定般普通。函数是Haskell中的“一等公民”，也就是说可以将函数做为一种“值”与符号或者其他函数的参数绑定。所以，如[[src:cpp_func_ptr]]中的 ~chain~ 函数模板那样，实现连锁调用两个函数的多态函数在Haskell中的实现只需两行，如[[src:hs_chain]]所示。
 #+CAPTION: Haskell中的 ~chain~ 函数
 #+NAME: src:hs_chain
-#+INCLUDE: "../src/examples/functional.hs" src haskell :lines "1-3"
+#+BEGIN_SRC haskell 
+chain :: (b -> c) -> (a -> b) -> a -> c
+chain func0 func1 v = func0 (func1 v)
+#+END_SRC
 第一行是 ~chain~ 的类型声明。在讨论Haskell的[[泛型编程][泛型编程]]时已经介绍过，函数的类型声明形式为 ~参数1->参数2->...->返回值类型~ 。在本例中， ~chain~ 函数的前两个参数本身也是函数，其类型也是 ~a->b~ 的形式。为避免混淆，我们需要用括号将其从 ~chain~ 的类型声明中分隔出来。第二行是 ~chain~ 的实现，其中连锁调用 ~func1~ 与 ~func0~ 于参数 ~v~ 以得到返回值。相应地，在Haskell中所实现的 ~is_odd~ 、 ~string_to_bool~ 以及其应用于 ~chain~ 的代码如[[src:hs_is_odd_string]]所示。
 #+CAPTION: Haskell中的算法复用
 #+NAME: src:hs_is_odd_string
-#+INCLUDE: "../src/examples/functional.hs" src haskell :lines "4-13"
+#+BEGIN_SRC haskell 
+is_odd :: Int -> Bool
+is_odd v | (mod v 2) == 0  = False
+         | otherwise       = True
+
+bool_to_string :: Bool -> String
+bool_to_string v | v == True = "True"
+                 | otherwise = "False"
+
+test_chain = chain bool_to_string is_odd 4
+#+END_SRC
 
 表面上， ~chain~ 函数也只是实现了两个函数的连锁调用并返回所得值，并没有返回一个能连锁调用的函数。按照之前的讨论，这不是一种闭合的复用，无法再进行算法复用。其实不然，利用 ~chain~ 实现三个函数的连锁调用也异常简单，如[[src:hs_closed_reuse]]的代码所示。
 #+CAPTION: Haskell中的闭合复用
 #+NAME: src:hs_closed_reuse
-#+INCLUDE: "../src/examples/functional.hs" src haskell :lines "14-19"
+#+BEGIN_SRC haskell 
+invert :: Bool -> Bool
+invert v | v == True = False
+         | otherwise = True
+
+test_chain_3 = chain bool_to_string (chain invert is_odd) 4
+#+END_SRC
 这段代码的关键在于括号中的 ~chain~ 的应用方式。完全的应用 ~chain~ 需要三个参数——两个函数及一个数值。但这里的 ~chain~ 只应用于两个参数，是一种不完全应用。对函数的不完全应用实际上返回了另一个函数，该函数可以继续应用于剩余参数，直至参数补全后返回完全应用 ~chain~ 所得到的值。
 
 这也是Haskell的函数类型声明中并不区分参数类型与返回值类型，统一用箭头符（ ~->~ ）连接的原因。在概念上，Haskell中的函数与 \lambda 算子性质相同，都是单输入单输出的函数，并且无论是输入还是输出都可以是某种函数。所谓多个参数的函数，其实是一个单输入并返回一个函数的函数。如某函数 ~f~ 的类型为 ~f::a->b->c~ ，则 ~f~ 只有一个 ~a~ 类型的参数，并返回一个 ~b->c~ 的函数。而 ~f~ 应用于 ~a~ 类型值 ~x~ 和 ~b~ 类型值 ~y~ 并得到 ~c~ 类型值 ~z~ 的具体过程应为： 首先 ~f x~ 得到一个 ~b->c~ 类型的函数，记为 ~g~ ；再将 ~g~ 应用于 ~y~ 从而得到返回值 ~z~ 。
 
 所以在Haskell中，箭头符是一种在类型域的双目运算符。将其应用于两个类型，将得到一个新的函数类型。并且，根据上面的讨论，箭头符是右结合的，也就是说：
-#+BEGIN_SRC haskell
-  f :: a -> b -> c -> d
+#+BEGIN_SRC haskell 
+f :: a -> b -> c -> d
 #+END_SRC
 等价于:
-#+BEGIN_SRC haskell
-  f :: a -> (b -> (c -> d))
+#+BEGIN_SRC haskell 
+f :: a -> (b -> (c -> d))
 #+END_SRC
 而对 ~f~ 的完全应用：
-#+BEGIN_SRC haskell
+#+BEGIN_SRC haskell 
 f a b c
 #+END_SRC
 也等价于：
-#+BEGIN_SRC haskell
+#+BEGIN_SRC haskell 
 ((f a) b) c
 #+END_SRC
 
