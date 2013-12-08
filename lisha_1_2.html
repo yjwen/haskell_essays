@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<head>
+<title>为什么选择Haskell 之二 Haskell代码更易复用</title>
+<!-- 2013-12-08 Sun 16:55 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="温宇杰" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<ul id="chapter"> <li> Haskell漫谈集 <ul> <li> LisHa项目 </li> </ul> </li> </ul>
+<ul id="navi"><li><a href="lisha_1_1.html">上一篇：Haskell更抽象</a></li><li><a href="lisha_1_3.html">下一篇：Haskell软硬兼顾的可能性</a></li></ul>
+</div>
+<div id="content">
+<h1 class="title">为什么选择Haskell 之二 Haskell代码更易复用</h1>
+<p>
+可复用的代码对于一个软件项目的开发总是会起到事半功倍的效果。一方面，作者可以用更精炼的代码解决问题；更为重要的另一方面是，复用代码对于维护者更加容易理解。在软件开发中，代码作者与维护者不同是常有的事情。维护者花费一段时间和精力理解了某个函数，然后发现这个函数在多处复用，从而自己也可以“复用”对该函数的理解而更快理解其它代码，这是多么令人身心愉悦的事情。与之相反，在看到有如散文一样信马由缰，以复制粘贴为复用基本方法的代码时，维护者在心里定会咒骂这个作者。
+</p>
+
+<p>
+要写出结构精巧，高度复用的代码，作者对问题的提炼与抽象固然必不可少，编程语言能为代码复用提供多少技术支持也很重要。如果是用汇编语言编程，则再多的分解与抽象也将无用武之地。不同的语言之间，复用的实现方式也不尽相同，要为众多语言定一个令人信服的复用性的绝对排名显然是不可能的，也超出我的能力。基于两个原因，在此仅就Haskell与C++两种语言基于我的理解做一个定性的比较。首先，C++是我最熟悉的语言，没有之一。另外，C++与Haskell一样，都是强类型语言，C++的变量与Haskell中的符号都有类型，不同类型之间不能赋值或关联。这使得二者的代码复用机制有一定相似之处，便于比较。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 语言的复用性</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+语言的复用性这个概念过于笼统。我们需要先对其进一步细分，才好对Haskell和C++两种语言做逐项比较。
+</p>
+
+<p>
+首先，数据结构和算法是高级编程语言的两大基本要素。据此，我们可以将代码复用分成三种：数据结构复用数据结构、算法复用数据结构以及算法复用算法。这里所说的甲方复用乙方，是指在甲方的代码中用到乙方代码的定义。以下讨论中，我们用甲方乙方分别指代复用方代码与被复用方代码。另外，此处的数据结构是纯粹的数据的结构化描述，不包含如面向对象设计中的成员函数那样与数据结构相关的算法，所以，不存在数据结构复用算法的情况。
+</p>
+
+<p>
+即使是同一种复用，也可以继续细分为特定与非特定的两种复用机制，两者的区别在于乙方代码的定义是否在甲方代码范围内已知，如是则为特定复用，否则为非特定复用。
+</p>
+
+<p>
+特定复用是编程语言的非常基本的功能。例如在定义某个复杂结构体时用到另一个结构体的定义，可归为数据结构间的特定复用；在函数中调用另一个函数则为算法间的特定复用；而在函数中利用某个复杂结构体保存数据或函数参数，则为算法特定复用数据结构。C++和Haskell都具备以上这些基本功能，二者在特定复用上不分高下，在此不做过多讨论。
+</p>
+
+<p>
+特定复用是甲方与有限的若干乙方代码之间的复用关系，而非特定复用由于乙方代码不确定，是甲方与（理论上）无限的乙方代码之间的复用关系。任何特定复用都可以通过将乙方代码抽象而提升为非特定复用，所以，非特定复性所代表的复用性更高。要比较语言的复用性，需要对其非特定复用功能着重讨论。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 泛型编程</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+我们首先讨论数据结构对数据结构以及算法对数据结构的非特定复用。这两种复用统称为对数据结构的非特定复用。由于所复用的是不特定的数据结构定义，在强类型语言中，这属于泛型编程（Generic Programming）的范畴。
+</p>
+
+<p>
+C++的泛型编程是通过以类型为参数的类模板和函数模板实现的。乙方的数据结构被抽象成模板的类型参数，从而任何满足模板的隐含要求的类型都可以应用于甲方的模板代码而生成对应的模板实例。如<a href="#src:cpp_template">1</a>所示的代码中，类模板 <code>pair</code> 可以生成针对任意类型的数据对类型，函数模板 <code>sqsum</code> 返回任意类型的两个数的平方和。 <code>sqsum</code> 模板可用于计算整数、浮点数、复数或者有理数的平方和。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">C++的类模板与函数模板</label>
+<pre class="src src-c++" id="src:cpp_template"><span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#23450;&#20041;&#19968;&#20010;&#20445;&#23384;&#20219;&#24847;&#20004;&#31181;&#31867;&#22411;&#25968;&#25454;&#30340;&#25968;&#25454;&#23545;&#31867;&#27169;&#26495;</span>
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">T1, T2&#26159;&#27169;&#26495;&#21442;&#25968;&#65292;&#25351;&#20195;&#24453;&#20445;&#23384;&#25968;&#25454;&#30340;&#31867;&#22411;</span>
+<span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T1</span>, <span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T2</span>&gt;
+<span style="color: #00ffff;">struct</span> <span style="color: #98fb98;">pair</span> {<span style="color: #98fb98;">T1</span> <span style="color: #eedd82;">first</span>; <span style="color: #98fb98;">T2</span> <span style="color: #eedd82;">second</span>;};
+
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#23450;&#20041;&#38024;&#23545;&#20219;&#24847;&#31867;&#22411;&#25968;&#25454;&#30340;&#27714;&#24179;&#26041;&#21644;&#30340;&#20989;&#25968;</span>
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">T&#26159;&#27169;&#26495;&#21442;&#25968;&#65292;&#25351;&#20195;&#24453;&#27604;&#36739;&#30340;&#25968;&#25454;&#30340;&#31867;&#22411;</span>
+<span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T</span>&gt;
+<span style="color: #98fb98;">T</span> <span style="color: #87cefa;">sqsum</span>(T <span style="color: #00ffff;">const</span> &amp;<span style="color: #eedd82;">v1</span>, T <span style="color: #00ffff;">const</span> &amp;<span style="color: #eedd82;">v2</span>) {<span style="color: #00ffff;">return</span> v1 * v1 + v2 * v2;}
+</pre>
+</div>
+
+<p>
+Haskell拥有一种与C++模板类似的机制——多态（Polymorphism）。如果一个类型定义中带有参数，则该类型是一个多态类型，参数指代另一种类型。如果一个函数的类型定义（函数的类型由其输入参数类型及返回值类型决定）中包含参数，则函数是一个多态函数。<a href="#src:hs_polymorphism">2</a>的代码演示了在Haskell中如何利用多态定义与<a href="#src:cpp_template">1</a>类似的泛型数据结构与算法。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">Haskell的多态类型与函数</label>
+<pre class="src src-haskell" id="src:hs_polymorphism"><span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">&#21487;&#20197;&#20445;&#23384;&#20219;&#24847;&#31867;&#22411;&#25968;&#25454;&#30340;&#22810;&#24577;&#31867;&#22411;Pair</span>
+<span style="color: #00ffff;">data</span> <span style="color: #98fb98;">Pair</span> a b <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">Pair</span> {
+  first <span style="color: #eedd82;">::</span> a,
+  second <span style="color: #eedd82;">::</span> b
+  }
+
+<span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">&#35745;&#31639;&#20219;&#24847;&#25968;&#23383;&#31867;&#22411;&#30340;&#24179;&#26041;&#21644;</span>
+<span style="color: #87cefa;">sqsum</span> <span style="color: #eedd82;">::</span> <span style="color: #98fb98;">Num</span> a <span style="color: #eedd82;">=&gt;</span> a <span style="color: #eedd82;">-&gt;</span> a <span style="color: #eedd82;">-&gt;</span> a <span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">sqsum&#30340;&#31867;&#22411;&#23450;&#20041;</span>
+<span style="color: #87cefa;">sqsum</span> x y <span style="color: #eedd82;">=</span> x <span style="color: #eedd82;">*</span> x <span style="color: #eedd82;">+</span> y <span style="color: #eedd82;">*</span> y     <span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">sqsum&#30340;&#23454;&#29616;</span>
+</pre>
+</div>
+
+<p>
+这样看来，似乎Haskell与C++在泛型编程上不相上下。但依愚见，Haskell要略胜一筹。
+</p>
+
+<p>
+C++的模板机制有一个很恼人的缺陷，就是缺乏模板对类型参数要求的成文描述。在<a href="#src:cpp_template">1</a>中的平方和函数 <code>sqsum</code> 中要对两个函数参数做乘法和加法，这实际上要求函数参数的类型，即模板的类型参数，必须支持乘法和加法运算，否则将会编译出错。但是，由于模板的参数都只是用关键字 <code>typename</code> 标识，根本无法反映如上的函数对模板参数的隐含要求。这将导致编译器无法在早期锁定错误，也无法在编译出错时给出正确的错误原因。例如，我们将 <code>std::string</code> 值（即字符串）传给 <code>sqrt</code> 函数参数时（如<a href="#src:cpp_wrong_concept">3</a>所示），GCC 4.6.4将给出如下的报错信息，示意错误在函数模板中，而不在调用函数模板时。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">不满足模板隐含要求的参数类型</label>
+<pre class="src src-c++" id="src:cpp_wrong_concept"><span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">std::string&#31867;&#22411;&#19981;&#33021;&#36827;&#34892;&#20056;&#27861;&#21644;&#21152;&#27861;&#36816;&#31639;&#12290;</span>
+<span style="color: #7fffd4;">std</span>::cout &lt;&lt; sqsum(<span style="color: #7fffd4;">std</span>::string(<span style="color: #ffa07a;">"abc"</span>), <span style="color: #7fffd4;">std</span>::string(<span style="color: #ffa07a;">"def"</span>)) &lt;&lt; <span style="color: #7fffd4;">std</span>::endl;
+</pre>
+</div>
+
+<pre class="example">
+cpp_template.cpp: 在函数‘T sqsum(const T&amp;, const T&amp;) [with T = std::basic_string&lt;char&gt;]’中:
+cpp_template.cpp:24:60：从此处实例化
+cpp_template.cpp:11:58: 错误： ‘operator*’在‘v2 * v2’中没有匹配
+cpp_template.cpp:11:58: 错误： ‘operator*’在‘v1 * v1’中没有匹配
+</pre>
+<p>
+对于像标准模板库（Standard Template Library, STL）中那些深度依赖模板的库函数，一但用错，将产生大量误导的编译报错信息。这使得模板编程虽然是C++的一大强力工具，却被大多数不熟悉模板的程序员视为畏途，敬而远之。
+</p>
+
+<p>
+虽然C++界内曾经尝试为模板参数增加成文的要求，但这一提案最终被最新标准C++11排除在外，似乎也不在C++14的草案之中。那么，C++模板的这一痼疾在近期治愈无望。
+</p>
+
+<p>
+Haskell对多态的处理要更为严谨。在<a href="#src:hs_polymorphism">2</a>中的 <code>sqsum</code> 函数中，为了声明这是一个多态函数，我们必须为该函数添加类型声明：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">&#21487;&#20197;&#20445;&#23384;&#20219;&#24847;&#31867;&#22411;&#25968;&#25454;&#30340;&#22810;&#24577;&#31867;&#22411;Pair</span>
+<span style="color: #00ffff;">data</span> <span style="color: #98fb98;">Pair</span> a b <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">Pair</span> {
+  first <span style="color: #eedd82;">::</span> a,
+  second <span style="color: #eedd82;">::</span> b
+  }
+
+<span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">&#35745;&#31639;&#20219;&#24847;&#25968;&#23383;&#31867;&#22411;&#30340;&#24179;&#26041;&#21644;</span>
+<span style="color: #87cefa;">sqsum</span> <span style="color: #eedd82;">::</span> <span style="color: #98fb98;">Num</span> a <span style="color: #eedd82;">=&gt;</span> a <span style="color: #eedd82;">-&gt;</span> a <span style="color: #eedd82;">-&gt;</span> a <span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">sqsum&#30340;&#31867;&#22411;&#23450;&#20041;</span>
+<span style="color: #87cefa;">sqsum</span> x y <span style="color: #eedd82;">=</span> x <span style="color: #eedd82;">*</span> x <span style="color: #eedd82;">+</span> y <span style="color: #eedd82;">*</span> y     <span style="color: #ff7f24;">-- </span><span style="color: #ff7f24;">sqsum&#30340;&#23454;&#29616;</span>
+
+<span style="color: #87cefa;">main</span> <span style="color: #eedd82;">=</span> <span style="color: #00ffff;">do</span>
+  <span style="color: #00ffff;">let</span> pair <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">Pair</span> 15 16
+  putStrLn <span style="color: #eedd82;">$</span> show <span style="color: #eedd82;">$</span> sqsum (first pair) (second pair)
+</pre>
+</div>
+<p>
+声明中的 <code>a</code> 是类型符号， <code>a-&gt;a-&gt;a</code> 声明函数类型为接受任意 <code>a</code> 类型的两个参数并返回一个 <code>a</code> 类型值（其中另有玄机，暂且不论）。这个 <code>sqsum</code> 函数中同样需要对 <code>a</code> 类型的参数 <code>x</code> 和 <code>y</code> 作乘法和加法运算。为了体现函数对类型的要求，我们必须在类型声明之前添加 <code>Num a =&gt;</code> ，这个声明约束类型 <code>a</code> 必须是类型族（type class） <code>Num</code> 的一员。 <code>Num</code> 是Haskell中预定义的类型族，族中都是可以进行加、减、乘、求负数、求符号运算的类型。满足要求的Haskell预定义类型也已经是该族成员。如果要将自定义类型加入该族，就必须为类型提供族所要求的运算函数。另外，Haskell也允许自定义类型族。
+</p>
+
+<p>
+类型族从两方面防止了C++模板的痼疾在Haskell中出现。一方面，在多态函数中，如果某个符号类型由类型符号决定，则只可将约束该符号类型的类型族中定义的函数（加、减等等运算符也是函数）应用于该符号。如果某个类型符号不受任何类型族约束，则以之为类型的符号不能进行任何函数运算。如果将<a href="#src:hs_polymorphism">2</a>中 <code>sqsum</code> 的类型族约束 <code>Num a</code> 删除，则GHC编译该代码时将报错，指出不能将 <code>x</code> 和 <code>y</code> 应用于 <code>Num</code> 类型族的运算 <code>+</code> 。这一提示非常明确，足够程序员精准定位错误所在并改正。
+</p>
+
+<p>
+另一方面，在将多态函数应用于某个类型的值时，编译器也会检查该类型是否是对应类型族的成员。例如将 <code>sqsum</code> 应用于两个字符串时：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #87cefa;">sqsum</span> <span style="color: #ffa07a;">"abc"</span> <span style="color: #ffa07a;">"def"</span>
+</pre>
+</div>
+<p>
+由于 "abc" 和 "def" 的类型 <code>String</code> (即字符串类型)不是 <code>Num</code> 类型族的成员，编译器将直接报错，指出该错误，而不用像C++的编译器那样直到编译乘法和加法表达式时才发现有错，而给出误导的报错信息。
+</p>
+
+<p>
+可见，由于类型族的存在，Haskell的泛型编程机制要比C++更为完善。从代码复用的角度审视，在对数据类型的非特定复用上，Haskell要略胜于C++。但这只是二者在代码复用差距中的一小部分。更为显著的差距，出现在我们尚未讨论过的算法对算法的非特定复用上。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 对算法的复用</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+算法间的两种复用可以说是处在代码复用发展道路的两极上。早在汇编语言时代，算法间的特定复用，即已知函数之间的相互调用，就已经是寻常功能了。非特定复用，即在函数中调用不特定的其他函数，则一直作为一种较为高级的语言特性，不在众多现代编程语言的“常所用挌虎大戟”之列。
+</p>
+
+
+<div class="figure">
+<p><img src="images/halberd.jpg" alt="halberd.jpg" />
+</p>
+</div>
+
+<p>
+在对数据结构的非特定复用中，无论是C++和Haskell都必须提供某种形式的参数以指代所复用的数据结构。在C++中是类型模板参数，Haskell中是类型符号。同样，在对算法的非特定复用中，也需要某种参数以指代所复用的算法。
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> C++的函数指针</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+C++是以函数指针来指代所复用的算法，即某个函数。C++声明函数指针类型的语法颇为怪异，例如以下的代码将声明一个函数指针类型 <code>func_ptr_type</code> 。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c++"><span style="color: #00ffff;">typedef</span> <span style="color: #98fb98;">int</span> (*<span style="color: #98fb98;">func_ptr_type</span>)(<span style="color: #98fb98;">char</span>, <span style="color: #98fb98;">double</span>);
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#22768;&#26126;func_ptr_type&#26159;&#19968;&#20010;&#20989;&#25968;&#25351;&#38024;&#31867;&#22411;&#65292;&#21482;&#33021;&#25351;&#21521;&#25509;&#21463;&#20004;&#20010;char&#21644;double&#31867;</span>
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#22411;&#21442;&#25968;&#19988;&#36820;&#22238;int&#20540;&#30340;&#20989;&#25968;&#12290;</span>
+</pre>
+</div>
+<p>
+从代码中可以看出，函数指针类型中已经包含了对函数参数个数、类型以及返回值类型的约束信息。所以，某种类型的函数指针只能指向特定参数类型和数目以及返回值类型的函数。将函数指针与模板的类型参数相结合，在C++中可以写出针对不同参数类型的函数的复用代码，但仍然要求函数参数数目固定。例如<a href="#src:cpp_func_ptr">4</a>中所示的函数模板 <code>chain</code> ，对于任意两个单参数函数 <code>func0</code> 和 <code>func1</code> ，只要满足 <code>func1</code> 的返回值与 <code>func0</code> 的参数值类型相同，就对某个 <code>func1</code> 的参数类型的值，返回连锁调用 <code>func1</code> 及 <code>func0</code> 所得到的值。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">C++函数指针</label>
+<pre class="src src-c++" id="src:cpp_func_ptr"><span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T0</span>,
+         <span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T1</span>,
+         <span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T2</span>&gt;
+<span style="color: #98fb98;">T0</span> <span style="color: #87cefa;">chain</span>(<span style="color: #98fb98;">T0</span> (*<span style="color: #eedd82;">func0</span>)(<span style="color: #98fb98;">T1</span>),
+<span style="color: #ff7f24;">//            </span><span style="color: #ff7f24;">^^^^^&#22768;&#26126;func0&#26159;&#19968;&#20010;&#20989;&#25968;&#25351;&#38024;&#65292;&#25351;</span>
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#21521;&#26377;&#19968;&#20010;T1&#22411;&#21442;&#25968;&#24182;&#36820;&#22238;&#19968;&#20010;T0&#22411;&#20540;&#30340;&#20989;&#25968;</span>
+         <span style="color: #98fb98;">T1</span> (*<span style="color: #eedd82;">func1</span>)(<span style="color: #98fb98;">T2</span>),
+<span style="color: #ff7f24;">//            </span><span style="color: #ff7f24;">^^^^^&#31867;&#20284;func0&#65292;&#20063;&#26159;&#19968;&#20010;&#20989;&#25968;&#25351;&#38024;</span>
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#25351;&#21521;&#26377;&#19968;&#20010;T2&#22411;&#21442;&#25968;&#24182;&#36820;&#22238;&#19968;&#20010;T1&#22411;&#20540;&#30340;&#20989;&#25968;</span>
+         T2 <span style="color: #00ffff;">const</span> &amp;<span style="color: #eedd82;">v</span>)
+{
+  <span style="color: #00ffff;">return</span> func0(func1(v));
+}
+</pre>
+</div>
+
+<p>
+假如我们有函数 <code>is_odd</code> 和 <code>is_even</code> 分别判断某个整数是否为奇数及偶数并返回对应的布尔值，又有函数 <code>bool_to_string</code> 返回布尔值对应的字符串表示，那么借助 <code>chain</code> 函数模板，我们可以复用以上三个函数而分别实现判断整数是否为奇数和偶数并返回对应字符串的函数，如<a href="#src:cpp_func_reuse">5</a>所示。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">复用函数以实现新功能</label>
+<pre class="src src-c++" id="src:cpp_func_reuse"><span style="color: #98fb98;">bool</span> <span style="color: #87cefa;">is_odd</span>(<span style="color: #98fb98;">int</span> <span style="color: #eedd82;">v</span>) {<span style="color: #00ffff;">return</span> v % 2 == 1;}
+<span style="color: #98fb98;">bool</span> <span style="color: #87cefa;">is_even</span>(<span style="color: #98fb98;">int</span> <span style="color: #eedd82;">v</span>) {<span style="color: #00ffff;">return</span> v % 2 == 0;}
+<span style="color: #00ffff;">using</span> <span style="color: #00ffff;">namespace</span> <span style="color: #7fffd4;">std</span>;
+<span style="color: #98fb98;">string</span> <span style="color: #87cefa;">bool_to_string</span>(<span style="color: #98fb98;">bool</span> <span style="color: #eedd82;">v</span>) {<span style="color: #00ffff;">return</span> string(v ? <span style="color: #ffa07a;">"true"</span> : <span style="color: #ffa07a;">"false"</span>);}
+
+<span style="color: #98fb98;">void</span> <span style="color: #87cefa;">test_chain</span>()
+{
+  <span style="color: #7fffd4;">std</span>::cout &lt;&lt; chain(bool_to_string, is_odd, 3) &lt;&lt; <span style="color: #7fffd4;">std</span>::endl
+            &lt;&lt; chain(bool_to_string, is_even, 3) &lt;&lt; <span style="color: #7fffd4;">std</span>::endl;
+}
+</pre>
+</div>
+
+<p>
+但这种直接调用函数指针的方式对代码复用的贡献非常有限。如果要实现三个函数之间的连锁调用，则我们需要另外写一个 <code>chain3</code> 函数模板，而不能复用已有的 <code>chain</code> 。要实现最大限度的算法复用，我们需要有一种“闭合”的函数复用机制，即根据已有的函数生成新的函数。这样，新生成的函数才有可能再利用现有的函数复用机制继续生成新函数，从而提高代码的复用性。要做到这一点，新生成的函数中需要保留其所复用的函数指针以及调用复用函数时所需的参数等等，这一功能是函数指针无法胜任的。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> C++的函数对象</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+在C++中通常用一种重载了括号操作符的对象类型来模拟函数，称为函数对象。函数对象将所复用的函数指针（或其它函数对象）以及调用函数时所需的任何其它信息保存为成员变量，并在其重载的括号操作符成员函数中实现对复用函数的调用。所以，函数对象可以用来实现“闭合”的函数复用。将函数对象与模板相结合，则可以实现对不同参数类型的函数的复用。
+</p>
+
+<p>
+但是，由于C++对涉及函数类型的泛型编程支持非常有限，利用函数对象实现对算法的复用的代码非常繁琐，通常要在函数对象内按照约定重定义函数的参数类型及返回值类型，还要实现将函数指针封装成函数对象的封装类，以及为方便生成函数对象而实现的助手函数。虽然，在新标准C++11中引入了可以当场生成匿名函数对象的 &lambda; 函数机制，简化了被复用方的生成代码，却使得复用方要同时考虑函数指针、普通函数对象以及 &lambda; 函数对象三种情况，代码更加晦涩难懂。<a href="#src:cpp_closed_reuse">6</a>的代码演示了利用C++11的新特性实现闭合函数复用以及复用 <code>chain</code> 实现三个函数的连锁调用的方法。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">C++中的闭合函数复用</label>
+<pre class="src src-c++" id="src:cpp_closed_reuse"><span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#25552;&#21462;&#20989;&#25968;&#23545;&#35937;&#36820;&#22238;&#20540;&#30340;&#20803;&#20989;&#25968;</span>
+<span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T</span>&gt;
+<span style="color: #00ffff;">struct</span> <span style="color: #98fb98;">function_traits</span>
+{
+  <span style="color: #00ffff;">typedef</span> <span style="color: #98fb98;">decltype</span>(&amp;<span style="color: #7fffd4;">T</span>::<span style="color: #00ffff;">operator</span>()) operator_type;
+  <span style="color: #00ffff;">typedef</span> <span style="color: #00ffff;">typename</span> <span style="color: #7fffd4;">function_traits</span>&lt;operator_type&gt;::<span style="color: #98fb98;">return_type</span> <span style="color: #98fb98;">return_type</span>;
+};
+
+<span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">R</span>, <span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">C</span>, <span style="color: #00ffff;">typename</span>... A&gt;
+<span style="color: #00ffff;">struct</span> <span style="color: #98fb98;">function_traits</span>&lt;<span style="color: #98fb98;">R</span> (<span style="color: #7fffd4;">C</span>::*)(A...)&gt;
+{
+  <span style="color: #00ffff;">typedef</span> <span style="color: #98fb98;">R</span> <span style="color: #98fb98;">return_type</span>;
+};
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#20803;&#20989;&#25968;&#21040;&#27492;&#32467;&#26463;</span>
+
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#36830;&#38145;&#35843;&#29992;&#20004;&#20010;&#21333;&#21442;&#25968;&#20989;&#25968;&#30340;&#20989;&#25968;&#23545;&#35937;</span>
+<span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">Func0</span>,        <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">Func0&#19982;Func1&#20026;&#25152;&#35843;&#29992;&#30340;&#20989;&#25968;&#23545;&#35937;&#31867;&#22411;&#12290;</span>
+         <span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">Func1</span>&gt;
+<span style="color: #00ffff;">struct</span> <span style="color: #98fb98;">chain_func</span>
+{
+  <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#21033;&#29992;&#20803;&#20989;&#25968;&#25552;&#21462;&#20986;Func0&#30340;&#36820;&#22238;&#20540;&#31867;&#22411;</span>
+  <span style="color: #00ffff;">typedef</span> <span style="color: #00ffff;">typename</span> <span style="color: #7fffd4;">function_traits</span>&lt;<span style="color: #98fb98;">Func0</span>&gt;::<span style="color: #98fb98;">return_type</span> <span style="color: #98fb98;">return_type</span>;
+  <span style="color: #98fb98;">Func0</span> <span style="color: #eedd82;">func0</span>;                  <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#25152;&#22797;&#29992;&#30340;&#20989;&#25968;&#23545;&#35937;</span>
+  <span style="color: #98fb98;">Func1</span> <span style="color: #eedd82;">func1</span>;
+  <span style="color: #87cefa;">chain_func</span>(<span style="color: #98fb98;">Func0</span> <span style="color: #eedd82;">func0</span>, <span style="color: #98fb98;">Func1</span> <span style="color: #eedd82;">func1</span>) : func0(func0), func1(func1) {}
+  <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#37325;&#36733;&#30340;&#25324;&#21495;&#25805;&#20316;&#31526;&#65292;&#36830;&#38145;&#35843;&#29992;func1&#19982;func0</span>
+  <span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">T</span>&gt;
+  <span style="color: #98fb98;">return_type</span> <span style="color: #00ffff;">operator</span><span style="color: #87cefa;">()</span> (<span style="color: #98fb98;">T</span> <span style="color: #eedd82;">v</span>) {<span style="color: #00ffff;">return</span> func0(<span style="color: #98fb98;">func1</span>(<span style="color: #eedd82;">v</span>));}
+};
+
+<span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#29983;&#25104;&#36830;&#38145;&#35843;&#29992;&#20989;&#25968;&#23545;&#35937;&#30340;&#21161;&#25163;&#20989;&#25968;&#27169;&#26495;</span>
+<span style="color: #00ffff;">template</span>&lt;<span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">Func0</span>, <span style="color: #00ffff;">typename</span> <span style="color: #98fb98;">Func1</span>&gt;
+<span style="color: #98fb98;">chain_func</span>&lt;<span style="color: #98fb98;">Func0</span>, <span style="color: #98fb98;">Func1</span>&gt; <span style="color: #87cefa;">chain</span>(<span style="color: #98fb98;">Func0</span> <span style="color: #eedd82;">func_ptr0</span>, <span style="color: #98fb98;">Func1</span> <span style="color: #eedd82;">func_ptr1</span>)
+{
+  <span style="color: #00ffff;">return</span> <span style="color: #98fb98;">chain_func</span>&lt;Func0, Func1&gt;(func_ptr0, func_ptr1);
+}
+
+<span style="color: #98fb98;">void</span> <span style="color: #87cefa;">test_chain</span>()
+{
+  <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#21033;&#29992;C++11&#20013;&#30340;lambda&#20989;&#25968;&#29983;&#25104;&#20989;&#25968;&#23545;&#35937;</span>
+  <span style="color: #00ffff;">auto</span> <span style="color: #98fb98;">is_odd</span> = [](<span style="color: #98fb98;">int</span> <span style="color: #eedd82;">v</span>) <span style="color: #00ffff;">mutable</span> {<span style="color: #00ffff;">return</span> v % 2 == 1;};
+  <span style="color: #00ffff;">auto</span> <span style="color: #98fb98;">invert</span> = [](<span style="color: #98fb98;">bool</span> <span style="color: #eedd82;">v</span>) <span style="color: #00ffff;">mutable</span> {<span style="color: #00ffff;">return</span> !v;};
+  <span style="color: #00ffff;">auto</span> <span style="color: #98fb98;">bool_to_string</span> = [](<span style="color: #98fb98;">bool</span> <span style="color: #eedd82;">v</span>) <span style="color: #00ffff;">mutable</span> {
+    <span style="color: #00ffff;">return</span> <span style="color: #7fffd4;">std</span>::string(v ? <span style="color: #ffa07a;">"true"</span> : <span style="color: #ffa07a;">"false"</span>);
+  };
+
+  <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#29992;&#20004;&#27425;chain&#29983;&#25104;&#19977;&#20010;&#20989;&#25968;&#23545;&#35937;&#30340;&#36830;&#38145;&#35843;&#29992;&#20989;&#25968;&#12290;</span>
+  <span style="color: #00ffff;">auto</span> <span style="color: #98fb98;">is_even</span> = chain(invert, is_odd);
+  <span style="color: #00ffff;">auto</span> <span style="color: #98fb98;">is_even_str</span> = chain(bool_to_string, is_even);
+
+  <span style="color: #ff7f24;">// </span><span style="color: #ff7f24;">&#23558;&#25171;&#21360;&#23383;&#31526;&#20018;"true"</span>
+  <span style="color: #7fffd4;">std</span>::cout &lt;&lt; is_even_str(4) &lt;&lt; <span style="color: #7fffd4;">std</span>::endl;
+}
+</pre>
+</div>
+
+<p>
+总之，在C++中，无论是实现还是使用闭合的函数复用代码，都必须对函数指针、类型推导以及元编程等高级特性有所了解才行，这也大大限制了函数复用在C++中的广泛使用。
+</p>
+
+<p>
+我们花费了如此多的篇幅讨论C++中的算法复用机制，实在是因为它太过于复杂，以至于对于不少C++程序员来说，在日常工作中，罕有甚至从未尝试过算法复用。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Haskell的箭头</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+与C++形成鲜明对比的是，Haskell中的算法复用如同其符号绑定般普通。函数是Haskell中的“一等公民”，也就是说可以将函数做为一种“值”与符号或者其他函数的参数绑定。所以，如<a href="#src:cpp_func_ptr">4</a>中的 <code>chain</code> 函数模板那样，实现连锁调用两个函数的多态函数在Haskell中的实现只需两行，如<a href="#src:hs_chain">7</a>所示。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">Haskell中的 <code>chain</code> 函数</label>
+<pre class="src src-haskell" id="src:hs_chain"><span style="color: #87cefa;">chain</span> <span style="color: #eedd82;">::</span> (b <span style="color: #eedd82;">-&gt;</span> c) <span style="color: #eedd82;">-&gt;</span> (a <span style="color: #eedd82;">-&gt;</span> b) <span style="color: #eedd82;">-&gt;</span> a <span style="color: #eedd82;">-&gt;</span> c
+<span style="color: #87cefa;">chain</span> func0 func1 v <span style="color: #eedd82;">=</span> func0 (func1 v)
+</pre>
+</div>
+<p>
+第一行是 <code>chain</code> 的类型声明。在讨论Haskell的<a href="#sec-2">泛型编程</a>时已经介绍过，函数的类型声明形式为 <code>参数1-&gt;参数2-&gt;...-&gt;返回值类型</code> 。在本例中， <code>chain</code> 函数的前两个参数本身也是函数，其类型也是 <code>a-&gt;b</code> 的形式。为避免混淆，我们需要用括号将其从 <code>chain</code> 的类型声明中分隔出来。第二行是 <code>chain</code> 的实现，其中连锁调用 <code>func1</code> 与 <code>func0</code> 于参数 <code>v</code> 以得到返回值。相应地，在Haskell中所实现的 <code>is_odd</code> 、 <code>string_to_bool</code> 以及其应用于 <code>chain</code> 的代码如<a href="#src:hs_is_odd_string">8</a>所示。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">Haskell中的算法复用</label>
+<pre class="src src-haskell" id="src:hs_is_odd_string"><span style="color: #87cefa;">is_odd</span> <span style="color: #eedd82;">::</span> <span style="color: #98fb98;">Int</span> <span style="color: #eedd82;">-&gt;</span> <span style="color: #98fb98;">Bool</span>
+<span style="color: #87cefa;">is_odd</span> v <span style="color: #eedd82;">|</span> (mod v 2) <span style="color: #eedd82;">==</span> 0  <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">False</span>
+         <span style="color: #eedd82;">|</span> otherwise       <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">True</span>
+
+<span style="color: #87cefa;">bool_to_string</span> <span style="color: #eedd82;">::</span> <span style="color: #98fb98;">Bool</span> <span style="color: #eedd82;">-&gt;</span> <span style="color: #98fb98;">String</span>
+<span style="color: #87cefa;">bool_to_string</span> v <span style="color: #eedd82;">|</span> v <span style="color: #eedd82;">==</span> <span style="color: #98fb98;">True</span> <span style="color: #eedd82;">=</span> <span style="color: #ffa07a;">"True"</span>
+                 <span style="color: #eedd82;">|</span> otherwise <span style="color: #eedd82;">=</span> <span style="color: #ffa07a;">"False"</span>
+
+<span style="color: #87cefa;">test_chain</span> <span style="color: #eedd82;">=</span> chain bool_to_string is_odd 4
+</pre>
+</div>
+
+<p>
+表面上， <code>chain</code> 函数也只是实现了两个函数的连锁调用并返回所得值，并没有返回一个能连锁调用的函数。按照之前的讨论，这不是一种闭合的复用，无法再进行算法复用。其实不然，利用 <code>chain</code> 实现三个函数的连锁调用也异常简单，如<a href="#src:hs_closed_reuse">9</a>的代码所示。
+</p>
+<div class="org-src-container">
+<label class="org-src-name">Haskell中的闭合复用</label>
+<pre class="src src-haskell" id="src:hs_closed_reuse"><span style="color: #87cefa;">invert</span> <span style="color: #eedd82;">::</span> <span style="color: #98fb98;">Bool</span> <span style="color: #eedd82;">-&gt;</span> <span style="color: #98fb98;">Bool</span>
+<span style="color: #87cefa;">invert</span> v <span style="color: #eedd82;">|</span> v <span style="color: #eedd82;">==</span> <span style="color: #98fb98;">True</span> <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">False</span>
+         <span style="color: #eedd82;">|</span> otherwise <span style="color: #eedd82;">=</span> <span style="color: #98fb98;">True</span>
+
+<span style="color: #87cefa;">test_chain_3</span> <span style="color: #eedd82;">=</span> chain bool_to_string (chain invert is_odd) 4
+</pre>
+</div>
+<p>
+这段代码的关键在于括号中的 <code>chain</code> 的应用方式。完全的应用 <code>chain</code> 需要三个参数——两个函数及一个数值。但这里的 <code>chain</code> 只应用于两个参数，是一种不完全应用。对函数的不完全应用实际上返回了另一个函数，该函数可以继续应用于剩余参数，直至参数补全后返回完全应用 <code>chain</code> 所得到的值。
+</p>
+
+<p>
+这也是Haskell的函数类型声明中并不区分参数类型与返回值类型，统一用箭头符（ <code>-&gt;</code> ）连接的原因。在概念上，Haskell中的函数与 &lambda; 算子性质相同，都是单输入单输出的函数，并且无论是输入还是输出都可以是某种函数。所谓多个参数的函数，其实是一个单输入并返回一个函数的函数。如某函数 <code>f</code> 的类型为 <code>f::a-&gt;b-&gt;c</code> ，则 <code>f</code> 只有一个 <code>a</code> 类型的参数，并返回一个 <code>b-&gt;c</code> 的函数。而 <code>f</code> 应用于 <code>a</code> 类型值 <code>x</code> 和 <code>b</code> 类型值 <code>y</code> 并得到 <code>c</code> 类型值 <code>z</code> 的具体过程应为： 首先 <code>f x</code> 得到一个 <code>b-&gt;c</code> 类型的函数，记为 <code>g</code> ；再将 <code>g</code> 应用于 <code>y</code> 从而得到返回值 <code>z</code> 。
+</p>
+
+<p>
+所以在Haskell中，箭头符是一种在类型域的双目运算符。将其应用于两个类型，将得到一个新的函数类型。并且，根据上面的讨论，箭头符是右结合的，也就是说：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #87cefa;">f</span> <span style="color: #eedd82;">::</span> a <span style="color: #eedd82;">-&gt;</span> b <span style="color: #eedd82;">-&gt;</span> c <span style="color: #eedd82;">-&gt;</span> d
+</pre>
+</div>
+<p>
+等价于:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #87cefa;">f</span> <span style="color: #eedd82;">::</span> a <span style="color: #eedd82;">-&gt;</span> (b <span style="color: #eedd82;">-&gt;</span> (c <span style="color: #eedd82;">-&gt;</span> d))
+</pre>
+</div>
+<p>
+而对 <code>f</code> 的完全应用：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #87cefa;">f</span> a b c
+</pre>
+</div>
+<p>
+也等价于：
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell">((f a) b) c
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> Haskell的闭包</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+在后台为Haskell函数的以上特性提供支持的数据结构是闭包（Closure）。闭包中记录于某个函数的入口（即函数指针）以及函数运行所需的参数。当我们将函数与某符号绑定时，实际上是将一个指向该函数的闭包与该符号绑定。当函数应用于某些参数时，实际上是向对应的闭包中加入所应用参数值而得到一个新的闭包数据。只有包含了函数所需的全部参数及自由值的闭包才可能运行并得到返回值。
+</p>
+
+<p>
+闭包与C++中的函数对象非常相似，都是一种将函数与其运行所需数据统一保存的数据结构。不同点在于，C++并不提供对函数对象的原生支持。函数对象的所有代码，都需要人工完成。并且，由于C++中同时存在函数指针及函数对象两种可调用的类型，在C++11中又加入了 &lambda; 函数，使得泛型编程中针对函数的处理变得异常复杂。而在Haskell中，函数统一用闭包表示，但闭包的操作对程序员是完全透明的。程序员无需了解闭包的原理也可以进行函数的不完全应用及绑定，从而使得算法复用变得异常简单。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 小结</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+综上所述，Haskell在数据结构的复用和算法的复用这两个方面，都比C++更有优势。在数据结构的复用上，由于引入了类型族，Haskell对类型约束更加精密，从而可以在编译过程中先期发现类型错误并准确定位，给泛型编程提供了很好的辅助。而在算法复用上，由于内建闭包，Haskell中对函数的操作更加灵活自然，为函数式的解题思路提供了强力的支持。这一点，是即使引入了 &lambda; 函数的C++也无法与之比拟的。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">&#20316;&#32773;: 温宇杰</p>
+<p class="date">Created: 2013-12-08 Sun 16:55</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.3c)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

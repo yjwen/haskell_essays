@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<head>
+<title>为什么选择Haskell</title>
+<!-- 2013-12-08 Sun 16:43 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="温宇杰" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<ul id="chapter"> <li> Haskell漫谈集 <ul> <li> LisHa项目 </li> </ul> </li> </ul>
+<ul id="navi"><li><a href="lisha_0.html">上一篇：引子</a></li><li><a href="lisha_1_1.html">下一篇：Haskell更抽象</a></li></ul>
+</div>
+<div id="content">
+<h1 class="title">为什么选择Haskell</h1>
+<p>
+在浸淫于C++编程工作许多年之后，我对这门语言已经有些审美疲劳。因为正如Stroustrup教授在2013年度Going Native大会上所说，C++是”一门轻量级抽象的编程语言“<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>，所以，编写C++程序时总是要考虑语句是如何反映到硬件操作尤其是对内存的操作上的。这固然使得C++编译出的程序的运行效率可以和C媲美，但另一方面，也使得程序员须花大量精力考虑算法在硬件平台上的具体实现，而不能专注于算法本身，同时，也使得C++程序易于出错，难于调试。我希望能找到一门更抽象更精练的语言来换换口味。
+</p>
+
+<p>
+除了C++，Python和Tcl也是我的常用编程语言。刚开始学习Python时，其清爽的语法和特色鲜明的缩进式排版都曾使我眼前一亮。但是，也许是我学艺不精，没有领会Python的精髓，在使用Python编程一段时间以后，我感觉虽然其语法非常简练，却仍然需要在设计算法时关心数据在内存中的存取。除了一些语法糖之外，本质上和C++没什么差别。至于Tcl，我无话可说。
+</p>
+
+<p>
+有没有比C++和Python更加抽象的语言呢？带着这个问题，我把目光投向了一个陌生的领域——函数式编程，开始学习Haskell。函数式编程语言众多，而我之选择Haskell，纯粹是因为其据称是最具发展潜力的函数式编程语言。不管怎样，在学习了一段时间之后，我感觉Haskell正是我所寻找的那个语言。与C++及Python相比，Haskell代码更精练，用其编程时的思维方式更加抽象，同时程序更易维护。并且，Haskell于我还有一个独特的魅力，在于其更有潜力成为一种软硬兼顾的语言。有关Haskell的这些特点，且让我慢慢道来。
+</p>
+<div id="footnotes">
+<h2 class="footnotes">&#33050;&#27880;: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+英文原文“a light-weight abstraction programming language”。
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">&#20316;&#32773;: 温宇杰</p>
+<p class="date">Created: 2013-12-08 Sun 16:43</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.3c)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

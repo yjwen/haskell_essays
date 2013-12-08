@@ -7,9 +7,29 @@
 #preamble {
     background-color: DarkGreen;
     color: White;
-    font-size: 2.5em;
     padding: 10px;
     margin: 0 auto;
+}
+
+#chapter {
+    font-size: 2em;
+}
+
+#navi {
+    font-size: 1em;
+}
+
+#navi li {
+    list-style-type: none;
+}
+
+#navi li a {
+    color: GreenYellow;
+}
+
+#postamble {
+    background-color: OliveDrab;
+    text-align: right;
 }
 
 #content {

@@ -3,10 +3,11 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
 <head>
-<title>项目名：LisHa</title>
-<!-- 2013-10-03 Thu 21:35 -->
+<title>为什么选择Haskell 之一 Haskell更抽象</title>
+<!-- 2013-12-08 Sun 16:43 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
+<meta  name="author" content="温宇杰" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -91,7 +92,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012  Free Software Foundation, Inc.
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -177,49 +178,11 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="preamble" class="status">
-Haskell漫谈集
+<ul id="chapter"> <li> Haskell漫谈集 <ul> <li> LisHa项目 </li> </ul> </li> </ul>
+<ul id="navi"><li><a href="lisha_1.html">上一篇：为什么选择Haskell</a></li><li><a href="lisha_1_2.html">下一篇：Haskell更易复用</a></li></ul>
 </div>
 <div id="content">
-<h1 class="title">项目名：LisHa</h1>
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> 引子</h2>
-<div class="outline-text-2" id="text-1">
-<p>
-2013年9月10日，这一天是教师节，但对于一个程序员来说却没有什么特别。我坐在工位上一边翻看着软件的运行日志，一边构思着如何用Haskell实现对日志信息的自动解析，一边刷着微博。突然一条微博推荐的文章引起了我的兴趣。这篇文章(在<a href="http://norvig.com/lispy.html">这里</a>）讲解如何利用Python实现一个简单Lisp语言解释器。印象中已经不止一次看到用某某语言实现Lisp/Scheme解释器的文章。大概因为Lisp语法简洁，又具备程序语言的基本要素，所以才被众多程序员拿来练手。
-</p>
-
-<p>
-因为这篇文章的启发，正在学习Haskell的我，也有了利用Haskell实现Lisp解释器的想法。虽然Haskell版的Lisp解释器早已有之（比如<a href="http://www.defmacro.org/ramblings/lisp-in-haskell.html">这里</a>），但我也不妨“重走一遍长征路”，以借机将已学的Haskell技术再回味琢磨一番，并在开发过程中发现问题，继续探索未知的领域。毕竟，学习一门语言，无论是自然语言还是计算机语言，最重要的都是实践。实践出真知。所以，就这么决定了，我来实现一个Haskell版的Lisp解释器。
-</p>
-
-<p>
-Lisp是一门古老的语言，诞生于1958年，是现今还在广泛使用的高级语言之中的第二高龄<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>。Lisp同时也是一个语言大家庭，在其一个甲子有余的演化过程中，衍生出众多方言，例如现在正在默默支持我写作的Emacs Lisp，以及作为通用语言而更为广泛使用的Common Lispt和Scheme。三者中，Scheme语法最为简练，也是众多Lsip解释器的首选。我们的Lisp解释器也不例外，就以Scheme为目标语言。
-</p>
-
-<p>
-现在是时候给项目起个名字了。既然是以Haskell实现Lisp解释器，就将Lisp与Haskell两个词合并，项目名就叫LisHa。
-</p>
-</div>
-</div>
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> 为什么选择Haskell</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-在浸淫于C++编程工作许多年之后，我对这门语言已经有些审美疲劳。正如Stroustrup教授在2013年度Going Native大会上所说，C++是”一门轻量级抽象的编程语言“<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>。所以，编写C++程序时总是要考虑语句是如何反映到硬件操作尤其是对内存的操作上的。这固然使得C++编译出的程序的运行效率可以和C媲美，但另一方面，也使得程序员须花大量精力考虑算法在硬件平台上的具体实现，而不能专注于算法本身，同时，也使得C++程序易于出错，难于调试。我希望能找到一门更抽象更精练的语言来换换口味。
-</p>
-
-<p>
-除了C++，Python和Tcl也是我的常用编程语言。刚开始学习Python时，其清爽的语法和特色鲜明的缩进式排版都曾使我眼前一亮。但是，也许是我学艺不精，没有领会Python的精髓，在使用Python编程一段时间以后，我感觉虽然其语法非常简练，却仍然需要在设计算法时关心数据在内存中的存取。除了一些语法糖之外，本质上和C++没什么差别。至于Tcl，我无话可说。
-</p>
-
-<p>
-有没有比C++和Python更加抽象的语言呢？带着这个问题，我把目光投向了一个陌生的领域——函数式编程，开始学习Haskell。函数式编程语言众多，而我之选择Haskell，纯粹是因为其据称是最具发展潜力的函数式编程语言。不管怎样，在学习了一段时间之后，我感觉Haskell正是我所寻找的那个语言。与C++及Python相比，Haskell代码更精练，用其编程时的思维方式更加抽象，同时程序更易维护。并且，Haskell于我还有一个独特的魅力，在于其更有潜力成为一种软硬兼顾的语言。有关Haskell的这些特点，且让我慢慢道来。
-</p>
-</div>
-
-<div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Haskell更抽象</h3>
-<div class="outline-text-3" id="text-2-1">
+<h1 class="title">为什么选择Haskell 之一 Haskell更抽象</h1>
 <p>
 说Haskell更抽象，其原因一言以蔽之，Haskell没有变量。
 </p>
@@ -228,7 +191,7 @@ Lisp是一门古老的语言，诞生于1958年，是现今还在广泛使用的
 虽然在Haskell中也存在着一些类似于变量操作的语句，例如<a href="#src:not_variable">1</a>中的 <code>let</code> 语句。
 </p>
 <div class="org-src-container">
-<label class="org-src-name">Haskell中的let不是赋值</label>
+<label class="org-src-name">Haskell中的 <code>let</code> 不是赋值</label>
 <pre class="src src-haskell" id="src:not_variable"><span style="color: #87cefa;">main</span> <span style="color: #eedd82;">=</span> <span style="color: #00ffff;">do</span>
   <span style="color: #00ffff;">let</span> a <span style="color: #eedd82;">=</span> [4, 9, 7, 6, 15]
       b <span style="color: #eedd82;">=</span> minimum a
@@ -246,11 +209,10 @@ Lisp是一门古老的语言，诞生于1958年，是现今还在广泛使用的
 <p>
 为什么Haskell没变量，在回答这个问题之前，我们需要先讨论清楚变量是什么。
 </p>
-</div>
 
-<div id="outline-container-sec-2-1-1" class="outline-4">
-<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> 变量的本质</h4>
-<div class="outline-text-4" id="text-2-1-1">
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 变量的本质</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 首先，变量是数据的容器。我们可以从变量中读出数据，也可以向其写入数据。但在同一时刻，我们只可能或者从其读出或者向其写入数据，且新写入的数据将覆盖原有数据。无论是C++，Python，Java，Delphi还是什么其它语言（当然，不包括Haskell），其变量都满足以上描述。数据结构或者算法的书籍在介绍变量这个概念时通常都会用交换两变量内的数据为例来演示变量作为数据的功能。对于一般数据类型，要交换两变量中的数据，总是要引入第三个变量来保存中间数据。例如，在C++中交换两变量数据的函数模板如<a href="#src:cpp_swap">2</a>所示。
 </p>
@@ -281,9 +243,9 @@ Lisp是一门古老的语言，诞生于1958年，是现今还在广泛使用的
 </p>
 </div>
 
-<div id="outline-container-sec-2-1-1-1" class="outline-5">
-<h5 id="sec-2-1-1-1"><span class="section-number-5">2.1.1.1</span> 禁用变量的好处与不足</h5>
-<div class="outline-text-5" id="text-2-1-1-1">
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> 禁用变量的好处与不足</h3>
+<div class="outline-text-3" id="text-1-1">
 <p>
 Haskell不提供变量，也就阻断了程序员直接操作存储器的通路。所以用Haskell实现某个算法时，必须将原本对存储器的直接操作需求，提炼成更为抽象的数据间的映射关系，再写成代码。Haskell编译器将根据代码自动规划变量的声明，回收及对其的读写，以正确实现算法的功能。
 </p>
@@ -310,23 +272,23 @@ Even with years of experience, we remain astonished and pleased by how often our
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-1-2" class="outline-4">
-<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> 函数式编程</h4>
-<div class="outline-text-4" id="text-2-1-2">
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 函数式编程</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 由于没有变量，也没有循环，所以通常的编程思路组织方式如流程图、伪码等对Haskell并不适用。那么，Haskell的编程思路应该如何组织呢？答案是函数式编程。让我们通过一个实际的算法例子来体会什么是函数式编程。
 </p>
 </div>
 
-<div id="outline-container-sec-2-1-2-1" class="outline-5">
-<h5 id="sec-2-1-2-1"><span class="section-number-5">2.1.2.1</span> 冒泡函数</h5>
-<div class="outline-text-5" id="text-2-1-2-1">
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> 冒泡函数</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
 回到“交换两个变量中的数据”的问题。由于Haskell中没有变量，所以也无需去交换两个变量的数据。那么，在其它语言中需要交换两个变量的算法，在Haskell中应该如何实现呢？比如，冒泡排序就是一个典型的需要交换两变量数据的算法。为了简化讨论，我们在这里只考虑冒泡排序中的冒泡问题，即给定一个序列，如何将该序列的最大元素移动到序列首。并且，由于Haskell中最方便的数据结构是单向链表，在此，我们约定序列是保存在单向链表中。
 </p>
 
 <p>
-在有变量的程序语言中，冒泡问题可以通过一个循环解决。通过循环，从链表首节点遍历到链表的尾节点之前的节点，当当前节点的数据大于下一个节点的数据时，交换这两个节点的数据<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>。这样，遍历结束后，最大数据将保存在链表尾节点中。最后，再交换链表首尾节点的数据即可。该算法的一个最简单的C++实现如<a href="#src:cpp_bubble">3</a>所示。
+在有变量的程序语言中，冒泡问题可以通过一个循环解决。通过循环，从链表首节点遍历到链表的尾节点之前的节点，当当前节点的数据大于下一个节点的数据时，交换这两个节点的数据<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>。这样，遍历结束后，最大数据将保存在链表尾节点中。最后，再交换链表首尾节点的数据即可。该算法的一个最简单的C++实现如<a href="#src:cpp_bubble">3</a>所示。
 </p>
 <div class="org-src-container">
 <label class="org-src-name">C++的冒泡算法实现</label>
@@ -442,21 +404,11 @@ Haskell的一大魅力在于，很多时候，我们可以轻易地将解题公�
 </div>
 </div>
 </div>
-</div>
-</div>
 <div id="footnotes">
 <h2 class="footnotes">&#33050;&#27880;: </h2>
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-据维基百科<a href="http://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp词条</a>，另第一高龄是Fortran。
-</p></div>
-
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-英文原文“a light-weight abstraction programming language”。
-</p></div>
-
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
 当数据尺寸较大，使得交换两数据的运行开销较大时，更经济的方法是交换两节点在链表中的位置。在此，为使讨论简单，只考虑交换两数据的情况。
 </p></div>
 
@@ -464,8 +416,9 @@ Haskell的一大魅力在于，很多时候，我们可以轻易地将解题公�
 </div>
 </div></div>
 <div id="postamble" class="status">
-<p class="date">Created: 2013-10-03 Thu 21:35</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.1)</p>
+<p class="author">&#20316;&#32773;: 温宇杰</p>
+<p class="date">Created: 2013-12-08 Sun 16:43</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.3c)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
