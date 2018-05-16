@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>&lambda; 表达式，而已</title>
+<!-- 2018-05-16 三 23:11 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Yujie Wen" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">&lambda; 表达式，而已</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. &lambda; 表达式的应用（Application）</a></li>
+<li><a href="#sec-2">2. 绑定（Binding）</a></li>
+<li><a href="#sec-3">3. 局部绑定</a></li>
+<li><a href="#sec-4">4. 操作符也是 &lambda; 表达式</a></li>
+</ul>
+</div>
+</div>
+<p>
+首先，热烈庆祝本号关注人数破百（这是不是也暴露了本号根本无人关注的惨状呢？）
+</p>
+
+<p>
+之前的讨论已经说明，Haskell中的函数都是单输入单输出的形式，即其类型都可归结为 <code>x -&gt; y</code> ,其中 <code>x</code> 是输入类型， <code>y</code> 是输出类型。并且我们也尝试用形如 <code>f x = x + 1</code> 的代码定义过一些函数。那么，作为函数式编程语言的Haskell中的函数到底有什么特别之处呢？
+</p>
+
+<p>
+首先说明一点，Haskell中的函数本质上是一种特殊的表达式—— &lambda; 表达式。在Haskell中 &lambda; 表达式的写法为
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ff8700;">\</span> &#26631;&#35782;&#31526; <span style="color: #ff8700;">-&gt;</span> &#34920;&#36798;&#24335;
+</pre>
+</div>
+<p>
+标识符代表函数的输入，表达式即由输入得到输出的算式。之所以用反斜杠“ <code>\</code> ”引领 &lambda; 表达式，据说是因为反斜杠与 &lambda; 的斜边很相似，姑且信之。如果用 &lambda; 表达式来表示对整数加一的运算，则代码可以写成 <code>\ x -&gt; x + 1</code> 。
+</p>
+
+<p>
+所以，Haskell中函数的特别之处在于，函数是一种表达式。
+</p>
+
+<p>
+在程序语言中，表达式的一个重要特性就是它可以递归定义，即表达式是由表达式构成的。例如，在大多数程序语言中，加法表达式和乘法表达式通常定义为：
+</p>
+<pre class="example">
+表达式 ::= 加法表达式 | 乘法表达式 | 单位表达式
+单位表达式 ::= 标识符
+加法表达式 ::= 表达式 + 表达式
+乘法表达式 ::= 表达式 * 表达式
+</pre>
+<p>
+基于这样的定义，我们可以很方便地构造出更加复杂的表达式，例如 <code>(a + b) + c</code> 或者 <code>a * b + c</code> 等，而无需额外的特别语法支持。
+</p>
+
+<p>
+&lambda; 表达式同样也可以递归定义。其箭头符“ <code>-&gt;</code> ”右边的部分是一个表达式，当然可以是另外一个 &lambda; 表达式，比如以下的代码。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ff8700;">\</span> x <span style="color: #ff8700;">-&gt;</span> (<span style="color: #ff8700;">\</span> y <span style="color: #ff8700;">-&gt;</span> x <span style="color: #ff8700;">+</span> y)
+</pre>
+</div>
+<p>
+这个表达式的意义是，当用某个值（例如1）代入 <code>x</code> 时，将得到另外一个表达式 <code>\ y -&gt; 1 + y</code> 。再继续将某个值（例如2）代入 <code>y</code> 时，最终将得到 <code>1 + 2 = 3</code> 。通过在 &lambda; 表达式中嵌套 &lambda; 表达式，我们实际上实现了一个两输入的函数运算。依此类推，三输入乃至更多输入的函数运算都可以用 &lambda; 表达式实现。
+</p>
+
+<p>
+由于这种嵌套定义“多输入” &lambda; 表达式的方式略显繁琐，Haskell提供了另外一种简写形式，即允许在右箭头左边出现多个标识符。所以，上述表达式可以改写成
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ff8700;">\</span> x y <span style="color: #ff8700;">-&gt;</span> x <span style="color: #ff8700;">+</span> y
+</pre>
+</div>
+<p>
+这样看起来就顺眼多了。 <b>但是，要注意千万不要被简写形式所误导。一个 &lambda; 表达式表示的始终是一个单输入单输出的映射关系。</b>
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> &lambda; 表达式的应用（Application）</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+将某个具体值或者另一个表达式代入一个 &lambda; 表达式从而演算出新的值或者表达式的过程称为“应用”。在Haskell中，形如 <code>表达式A 表达式B</code> 的连续两个表达式即表示将表达式A应用于表达式B，显然表达式A必须可以演算出一个 &lambda; 表达式。例如在GHCi中输入
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #00d7af;">Prelude</span><span style="color: #ffd700;">&gt;</span> (<span style="color: #ff8700;">\</span> x <span style="color: #ff8700;">-&gt;</span> x <span style="color: #ff8700;">+</span> 1) 1
+2
+</pre>
+</div>
+<p>
+即表示将表达式 <code>\ x -&gt; x + 1</code> 应用于 <code>1</code> 从而演算得到 <code>1 + 1 = 2</code> 。
+</p>
+
+<p>
+应用也是一个表达式，并且是左结合的，也就是说 <code>表达式A 表达式B 表达式C</code> 等价于 <code>(表达式A 表达式B）表达式C</code> 。因此，我们可以很方便地将一个“多输入” &lambda; 表达式应用于“多个”输入值。比如
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #00d7af;">Prelude</span><span style="color: #ffd700;">&gt;</span> (<span style="color: #ff8700;">\</span> x <span style="color: #ff8700;">-&gt;</span> <span style="color: #ff8700;">\</span> y <span style="color: #ff8700;">-&gt;</span> x <span style="color: #ff8700;">+</span> y) 1 2
+3
+</pre>
+</div>
+<p>
+这一运算的具体过程是：首先将 &lambda; 表达式 <code>\ x -&gt; \ y -&gt; x + y</code> 应用于 1，得到另一个 &lambda; 表达式 <code>\ y -&gt; 1 + y</code> ，再将其应用于2，最终得到3。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 绑定（Binding）</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+但是，如以上各例那样每当需要进行运算时都重写一个 &lambda; 表达式的方式未免太笨拙。实际上，在Haskell中 &lambda; 表达式可以绑定到某个符号后反复应用。绑定的语法形式为 <code>标识符 =  \lambda 表达式</code> ，例如
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #00d7af;">Prelude</span><span style="color: #ffd700;">&gt;</span> f <span style="color: #ff8700;">=</span> <span style="color: #ff8700;">\</span> x y <span style="color: #ff8700;">-&gt;</span> x <span style="color: #ff8700;">+</span> y
+</pre>
+</div>
+<p>
+&lambda; 表达式经绑定之后，就可以反复应用了。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #00d7af;">Prelude</span><span style="color: #ffd700;">&gt;</span> f 1 2
+3
+<span style="color: #00d7af;">Prelude</span><span style="color: #ffd700;">&gt;</span> f 1 (f 2 3)
+6
+</pre>
+</div>
+
+<p>
+以上写法可以再进一步简化，将多个 &lambda; 表达式的输入挪到等号左边，写成
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">f</span> x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+</pre>
+</div>
+<p>
+至此，代码已经非常接近我们通常所理解的函数定义了。但是，无论其形式如何变化，其本质依然是将一个单输入单输出的 &lambda; 表达式绑定到一个符号而已。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 局部绑定</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+以上形式定义了一种全局绑定，即所绑定的符号在全局范围内（通常是一个module之内）都有效。此外，还可以定义一种局部绑定，其语法形式为 <code>let 绑定1; 绑定2; ... 绑定n in 表达式</code> 。这样定义的绑定只对 <code>in</code> 之后的表达式有效，在其它地方都不可见。局部绑定也是一种表达式，可以出现在任何允许表达式的地方（比如 <code>-&gt;</code> 右边)。
+</p>
+
+<p>
+以下代码既定义一个全局绑定 <code>f</code> ，又在 <code>f</code> 所绑定的表达式范围内定义了两个局部绑定 <code>f</code> 和 <code>g</code> 。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">f</span> x y <span style="color: #ff8700;">=</span> <span style="color: #a1db00;">let</span> f x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">-</span> y; g x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y <span style="color: #a1db00;">in</span> f (g x x) (g x x)
+</pre>
+</div>
+<p>
+虽然以上代码中并没有出现 <code>-&gt;</code> ，但是您可以想想局部绑定究竟是在哪个隐藏的 <code>-&gt;</code> 之右。
+</p>
+
+<p>
+局部绑定还可以利用Haskell的缩进语法改写为
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">f</span> x <span style="color: #ff8700;">=</span> <span style="color: #a1db00;">let</span> f x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">-</span> y
+          g x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+      <span style="color: #a1db00;">in</span> f (g x x) (g x x)
+</pre>
+</div>
+
+<p>
+局部绑定还有另外一种等价形式 <code>表达式 where 绑定1; ... 绑定n</code> 。所以上述代码还可以改写为
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">f</span> x <span style="color: #ff8700;">=</span> f (g x x) (g x x) <span style="color: #a1db00;">where</span> f x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">-</span> y; g x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+</pre>
+</div>
+<p>
+或者再利用缩进语法写为
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">f</span> x <span style="color: #ff8700;">=</span> f (g x x) (g x x)
+  <span style="color: #a1db00;">where</span> f x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">-</span> y
+        g x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 操作符也是 &lambda; 表达式</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+严谨地说，应该是操作符也绑定着某个 &lambda; 表达式。比如 <code>x + y</code> 中的 <code>+</code> 号，可以理解为一个如下的绑定
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell">(<span style="color: #ffd700;">+</span>) x y <span style="color: #ff8700;">=</span> op_add x y
+</pre>
+</div>
+<p>
+我们用 <code>op_add</code> 指代一个真正的非 &lambda; 表达式的加法算法。
+</p>
+
+<p>
+操作符的绑定本质上与标识符的绑定并无区别，只是定义绑定和应用绑定的形式不同。在Haskell中，数据标识符以任何ASCII或者unicode小写字母开头后接若干个大小写字母，数字及单引号构成。还有一种以大写字母开头的类型标识符暂且不担。操作符则以ASCII符号字符开头后接若干个ASCII或者unicode符号字符构成。所谓ASCII符号字符是!#$%&amp;*+./&lt;=&gt;?@\<sup>|</sup>-~中的任意一个。
+</p>
+
+<p>
+所以 <code>f</code> 是一个标识符， <code>+</code> 是一个操作符。
+</p>
+
+<p>
+我们可以将任意 &lambda; 表达式用绑定到标识符的方法绑定到一个自定义的操作符，只须将操作符放入()中即可。例如以下代码重新定义了一个加法操作符 <code>.\/.</code> 。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell">(<span style="color: #ffd700;">.\/.</span>) x y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+</pre>
+</div>
+
+<p>
+应用操作符绑定时也需要将操作符放在()中。比如
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">foo</span> <span style="color: #ff8700;">=</span> (<span style="color: #ff8700;">.\/.</span>) 1 2
+<span style="color: #6c6c6c; font-style: italic;">-- </span><span style="color: #6c6c6c; font-style: italic;">foo == 3</span>
+</pre>
+</div>
+
+<p>
+此外，鉴于操作符通常是进行两输入的运算，Haskell特别为操作符定义了适合于两输入的绑定和应用形式，即将操作符放在两个参数中间，此时不需要再添加()。所以上面的绑定和应用可以改写为
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell">x <span style="color: #ffd700;">.\/.</span> y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+<span style="color: #ffd700;">foo</span> <span style="color: #ff8700;">=</span> 1 <span style="color: #ff8700;">.\/.</span> 2
+</pre>
+</div>
+
+<p>
+但是这并不是说操作符只可与“两输入” &lambda; 表达式绑定。下面就是一个利用特殊语法将 <code>.\/.</code> 绑定到一个“三输入” &lambda; 表达式的代码。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell">(x <span style="color: #ff8700;">.\/.</span> y) z <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y <span style="color: #ff8700;">*</span> z
+<span style="color: #ffd700;">foo</span> <span style="color: #ff8700;">=</span> (1 <span style="color: #ff8700;">.\/.</span> 2) 3
+<span style="color: #6c6c6c; font-style: italic;">-- </span><span style="color: #6c6c6c; font-style: italic;">foo == 7</span>
+</pre>
+</div>
+
+<p>
+再进一步，标识符也可以用这种特殊语法绑定和应用，只需将标识符放在``之中即可。例如
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell">x <span style="color: #ff8700;">`</span><span style="color: #ffd700;">f</span><span style="color: #ff8700;">`</span> y <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> y
+<span style="color: #ffd700;">foo</span> <span style="color: #ff8700;">=</span> 1 <span style="color: #ff8700;">`f`</span> 2
+<span style="color: #6c6c6c; font-style: italic;">-- </span><span style="color: #6c6c6c; font-style: italic;">foo == 3</span>
+</pre>
+</div>
+
+<p>
+最后，让我们再回头看一下本篇开头提到的那个“函数定义”
+</p>
+<div class="org-src-container">
+
+<pre class="src src-haskell"><span style="color: #ffd700;">f</span> x <span style="color: #ff8700;">=</span> x <span style="color: #ff8700;">+</span> 1
+</pre>
+</div>
+<p>
+实际上定义的是一个对标识符 <code>f</code> 的 &lambda; 表达式绑定，而 <code>+</code> 是一个已经预定义好的操作符 &lambda; 表达式绑定。另外，所谓多输入的函数，实际上是一个多级嵌套定义的 &lambda; 表达式。函数的运算是通过 &lambda; 表达式的应用来实现的。虽然在本文中所举的例子都非常简单，但是在Haskell中无论多么复杂的函数运算，都是通过 &lambda; 表达式及绑定实现。纵观Haskell中的函数，一言以蔽之， &lambda; 表达式而已。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Yujie Wen</p>
+<p class="date">Created: 2018-05-16 三 23:11</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#preamble {
+    background-color: DarkGreen;
+    color: White;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+#chapter {
+    font-size: 2em;
+}
+
+#navi {
+    font-size: 1em;
+}
+
+#navi li {
+    list-style-type: none;
+}
+
+#navi li a {
+    color: GreenYellow;
+}
+
+#postamble {
+    background-color: OliveDrab;
+    text-align: right;
+}
+
+#content {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: WhiteSmoke;
+}
+
+pre.src {
+    background-color: DimGrey;
+    color: White;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #888888;
+    margin: 0 auto;
+}
+
+.org-src-name {
+    color: White;
+    background-color: DimGrey;
+    marge: 0 auto;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px #888888;
+    padding: 5px;
+}
