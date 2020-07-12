@@ -1,0 +1,24 @@
+#+TITLE: SystemVerilog中的泛型编程
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+
+泛型，几乎是现代静态类型编程语言中不可或缺的一种特性。他可以帮助我们在享用静态类型所带来的类型安全的同时，又可以像动态类型语言那样将同一套算法应用于已知或未知的多种类型。作为一名多年的C++开发人员，我总是在日常开发中积极实践泛型编程以提高开发效率。最近几年，我更多地使用SystemVerilog进行芯片逻辑设计和验证。其中，验证的代码量几倍于逻辑设计。每当我挣扎于各种繁复雷同的验证代码时，总不禁怀念C++的简练。直到某日，我突然发现SystemVerilog居然可以定义泛型类！
+
+* 泛型类
+
+SystemVerilog支持对类（class）的参数化。难能可贵的是，类的参数除了可以是一个常数之外，还可以是一个类型。下面的代码就利用类型参数定义了一个二元组类 ~Pair~ 。
+#+BEGIN_SRC verilog
+  class Pair #(type T0 = int,
+               type T1 = int);
+     T0 first;
+     T1 second;
+
+     function new(T0 _first, T1 _second);
+        first = _first;
+        second = _second;
+     endfunction // new
+  endclass // Pair
+#+END_SRC
+简单解释一下这段代码。在井号（#）之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用于定义成员变量的类型，成员函数的参数类型，返回类型等等。通过给类型参数 ~T0~ 和 ~T1~ 传递不同的类型，我们可以得到保存不同类型的二元组类。
+#+BEGIN_SRC verilog
+  Pa
+#+END_SRC
