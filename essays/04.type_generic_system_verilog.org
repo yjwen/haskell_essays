@@ -16,9 +16,17 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
         first = _first;
         second = _second;
      endfunction // new
+
+     function T0 get_first();
+        return first;
+     endfunction // get_first
+
+     function T1 get_second();
+        return second;
+     endfunction // get_second
   endclass // Pair
 #+END_SRC
-简单解释一下这段代码。在井号（#）之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用于定义成员变量的类型，成员函数的参数类型，返回类型等等。通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
+在井号（#）之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用于定义成员变量的类型，成员函数的参数类型，返回类型等等。通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
 #+BEGIN_SRC verilog
   Pair int_and_int = new (0, 0);
   Pair#(int) still_int_and_int = new (1, 1);
@@ -26,8 +34,6 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
   Pair#(.T0(string), .T1(byte)) string_and_byte = new ("A string", 8'hff);
 #+END_SRC
 首先，由于类参数必然有默认值，故无需为每个参数指定类型。如上例的第一行和第二行的情况，都得到一个保存两个整数值的二元组。另外，与module的端口类似，类的参数值可以采用按位置或按参数名的方式指定。如上例的第三和第四行所示。
-
-泛型类或者说类模板对于C++的一个重要意义是使之可以提供各种泛型的数据结构——容器。然而，诸如vector，map之类的容器，在SystemVerilog中已经有对应的内置支持，即数组（array）和关联数组（associative array）。所以，泛型类之于SystemVerilog只能说是有所裨益。另一方面，SystemVerilog缺乏对另一种重要的泛型形式——泛型函数——的支持。好在，还有补救方法。
 
 * 泛型类+静态成员函数＝泛型函数
 
