@@ -16,17 +16,9 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
         first = _first;
         second = _second;
      endfunction // new
-
-     function T0 get_first();
-        return first;
-     endfunction // get_first
-
-     function T1 get_second();
-        return second;
-     endfunction // get_second
   endclass // Pair
 #+END_SRC
-在井号（#）之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用于定义成员变量的类型，成员函数的参数类型，返回类型等等。通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
+在井号之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用于定义成员变量的类型，成员函数的参数类型，返回类型等等。通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
 #+BEGIN_SRC verilog
   Pair int_and_int = new (0, 0);
   Pair#(int) still_int_and_int = new (1, 1);
