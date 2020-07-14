@@ -18,7 +18,9 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
      endfunction // new
   endclass // Pair
 #+END_SRC
-在井号之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用于定义成员变量的类型，成员函数的参数类型，返回类型等等。通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
+在井号之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用定义成员变量的类型，成员函数的参数类型，返回类型以及 ~typedef~ 语句等任何需要类型定义的地方。
+
+通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
 #+BEGIN_SRC verilog
   Pair int_and_int = new (0, 0);
   Pair#(int) still_int_and_int = new (1, 1);
@@ -29,4 +31,23 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
 
 * 泛型类+静态成员函数＝泛型函数
 
-虽然在SystemVerilog中不能直接定义一个泛型的函数(function或task)
+SystemVerilog不支持像C++函数模板那样地直接定义泛型的函数(function或task)。要想实现一个泛型的函数，只能利用泛型类的静态成员函数。例如，要实现一个泛型的矩阵转置函数，可以采用如下的代码。
+#+BEGIN_SRC verilog
+  class Matrix #(type T = int, int NR = 2, int NC = 4);
+     typedef T InputM[NR][NC]; // 定义输入矩阵类型
+     typedef T OutputM[NC][NR]; // 定义输出矩阵类型
+
+     static function OutputM transpose(InputM m);
+        foreach (m[r, c])
+          transpose[c][r] = m[r][c];
+     endfunction // transpose
+  endclass // Matrix
+#+END_SRC
+
+SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的静态成员函数，必须明确的声明一个对应的泛型类。调用上述的矩阵转置函数的代码如下。
+#+BEGIN_SRC verilog
+  typedef Matrix#(real, 4, 8) RealM4x8;
+
+  om = RealM4x8::transpose(im); // 假定im是个4x8的实数矩阵，om是一个8x4的实数矩阵
+#+END_SRC
+
