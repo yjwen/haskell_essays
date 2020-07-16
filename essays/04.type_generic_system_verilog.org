@@ -31,7 +31,7 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
 
 * 泛型类+静态成员函数＝泛型函数
 
-SystemVerilog不支持像C++函数模板那样地直接定义泛型的函数(function或task)。要想实现一个泛型的函数，只能利用泛型类的静态成员函数。例如，要实现一个泛型的矩阵转置函数，可以采用如下的代码。
+SystemVerilog不支持像C++函数模板那样直接定义泛型的函数(function或task)。要想实现一个泛型的函数，只能利用泛型类的静态成员函数。例如，要实现一个泛型的矩阵转置函数，可以采用如下的代码。
 #+BEGIN_SRC verilog
   class Matrix #(type T = int, int NR = 2, int NC = 4);
      typedef T InputM[NR][NC]; // 定义输入矩阵类型
@@ -47,7 +47,10 @@ SystemVerilog不支持像C++函数模板那样地直接定义泛型的函数(fun
 SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的静态成员函数，必须明确的声明一个对应的泛型类。调用上述的矩阵转置函数的代码如下。
 #+BEGIN_SRC verilog
   typedef Matrix#(real, 4, 8) RealM4x8;
+  real om[8][4];
+  real im[4][8];
 
   om = RealM4x8::transpose(im); // 假定im是个4x8的实数矩阵，om是一个8x4的实数矩阵
 #+END_SRC
 
+* 
