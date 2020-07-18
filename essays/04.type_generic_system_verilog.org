@@ -107,4 +107,73 @@ SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的�
 
 四个interface都满足：
   1. 都有data, valid, ready三个成员变量；
-  2. 
+  2. valid和ready都是bit类型；
+  3. 都有两个modport定义，分别是prec和succ，且data, valid和ready在
+     modport中的端口方向相同；
+  4. 都有一个名为sync的clocking模块，且其中对data, valid和ready的端口
+     定义都一致。
+
+四个interface唯一的不同点就是data的类型。有了以上的interface定义，我们
+就可以通过泛型编程为之编写统一的激励和采样代码。
+
+在编写之前，还需要介绍一个重要的概念——virtual interface。interface和
+module类似，其实例在电路中都是一个独立的实体，代表着一组信号。
+interface不能作为类型声明变量。但是virtual interface可以构造一个对某个
+interface实例的引用。也就是说，virtual interface定义了一种类型，可作为
+泛型编程的类型参数。利用virtual interface，该流水线电路的输入激励可以
+用如下的泛型类实现。
+
+#+BEGIN_SRC verilog
+  class Stimulator #(type PipeType, // virtual interface
+                     type DataType  // data的类型
+                     );
+     PipeType pipe;
+     function new (PipeType _pipe);
+        pipe = _pipe;
+     endfunction // new
+
+     // 将一组data送入某个module
+     task call(DataType data[]);
+        @pipe.sync;
+        foreach (data[i]) begin
+           pipe.sync.data = data[i];
+           pipe.sync.valid = 1;
+           @pipe.sync;
+           while (!pipe.sync.read)
+             @pipe.sync;
+        end
+        pipe.sync.valid = 0;
+     endtask // call
+  endclass // Stimulator
+
+#+END_SRC
+
+同理，我们还可以为各个interface编写输出采样代码。
+
+#+BEGIN_SRC verilog
+  class Sampler #(type PipeType, // virtual interface
+                  type DataType // data的类型
+                  );
+     PipeType pipe; // 对某个interface的引用变量
+     function new (PipeType _pipe);
+        pipe = _pipe;
+     endfunction // new
+
+     task call(input n_samples,  // 采样数据数
+               output DataType data[$]　// 所采数据
+               );
+        data = {};
+        pipe.sync.ready = 1;
+        repeat (n_samples) begin
+           @pipe.sync;
+           while (!pipe.sync.valid)
+             @pipe.sync;
+           data.push_back(pipe.sync.data);
+        end
+        pipe.sync.ready = 0;
+     endtask // call
+  endclass // Sampler
+
+#+END_SRC
+
+
