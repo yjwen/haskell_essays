@@ -60,8 +60,51 @@ SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的�
 
 [[./images/pipeline.svg]]
 
-如果将
+如果将所传输的数据的类型作为参数，则很容易构造一个可以为流水线的各级产生输入激励和采样输出的验证类。在这里我们利用interface以及virtual interface简化RTL和验证的代码。
+
 ** interface与virtual interface
 
+首先，我们采用interface描述图中各级的输入输出数据。
+#+BEGIN_SRC verilog
+  // 将interface的通用部分定义为一个宏
+  `define PipeContent\
+     modport prec (input data, valid, output ready);\
+     modport succ (output data, valid, input ready);\
+     clocking sync @(posedge clk);\
+        default input #1step output @(negedge clk);\
+        input data, valid, ready;\
+        output data, valid, ready;\
+     endclocking\
 
+  interface Green (input bit clk);
+     GreenData data; 
+     bit ready;
+     bit valid;
+     `PipeContent;
+  endinterface // Green
 
+  interface Blue (input bit clk);
+     BlueData data;
+     bit ready;
+     bit valid;
+     `PipeContent;
+  endinterface // Blue
+
+  interface Red (input bit clk);
+     RedData data;
+     bit ready;
+     bit valid;
+     `PipeContent;
+  endinterface // Red
+
+  interface Purple (input bit clk);
+     PurpleData data;
+     bit ready;
+     bit valid;
+     `PipeContent;
+  endinterface // Purple
+#+END_SRC
+
+四个interface都满足：
+  1. 都有data, valid, ready三个成员变量；
+  2. 
