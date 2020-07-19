@@ -1,11 +1,16 @@
 #+TITLE: SystemVerilog中的泛型编程
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+OPTIONS: toc:nil
+
+#+BEGIN_QUOTE
+由于本人手头没有能够被个人使用的SystemVerilog的编译器及仿真器，因此，本文中的代码仅依照SystemVerilog标准而写成，未经过编译验证。但是，其中的编程思路已经在本人的工作中进行过验证。如您发现任何有关本文代码的问题，欢迎在本文的[[https://github.com/yjwen/haskell_essays/issues/new][github issue]]页提交问题。
+#+END_QUOTE
 
 泛型，几乎是现代静态类型编程语言中不可或缺的一种特性。他可以帮助我们在享用静态类型所带来的类型安全的同时，又可以像动态类型语言那样将同一套算法应用于已知或未知的多种类型。作为一名多年的C++开发人员，我总是在日常开发中积极实践泛型编程以提高开发效率。最近几年，我更多地使用SystemVerilog进行芯片逻辑设计和验证。其中，验证的代码量几倍于逻辑设计。每当我挣扎于各种繁复雷同的验证代码时，总不禁怀念C++的简练。直到某日，我突然发现SystemVerilog居然可以定义泛型类！
 
 * 泛型类
 
-SystemVerilog支持对类（class）的参数化。难能可贵的是，类的参数不仅可以是一个常数，还可以是一个类型。下面的代码就利用类型参数定义了一个二元组类 ~Pair~ 。
+SystemVerilog支持对类（class）的参数化。难能可贵的是，类的参数不仅可以是一个常数，还可以是一个类型。下面的代码就利用类型参数定义了一个二元组类Pair。
 #+BEGIN_SRC verilog
   class Pair #(type T0 = int,
                type T1 = int);
@@ -18,16 +23,16 @@ SystemVerilog支持对类（class）的参数化。难能可贵的是，类的�
      endfunction // new
   endclass // Pair
 #+END_SRC
-在井号之后的是 ~Pair~ 的参数列表。其中，类型参数以关键字 ~type~ 开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数 ~T0~ 和 ~T1~ 的默认値都设为 ~int~ 。类型参数可用定义成员变量的类型，成员函数的参数类型，返回类型以及 ~typedef~ 语句等任何需要类型定义的地方。
+在井号之后的是Pair的参数列表。其中，类型参数以关键字type开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数T0和T1的默认値都设为int。类型参数可用定义成员变量的类型，成员函数的参数类型，返回类型以及typedef语句等任何需要类型定义的地方。
 
-通过为类型参数 ~T0~ 和 ~T1~ 指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
+通过为类型参数T0和T1指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
 #+BEGIN_SRC verilog
   Pair int_and_int = new (0, 0);
   Pair#(int) still_int_and_int = new (1, 1);
   Pair#(int, bit) int_and_bit = new (1, 1'b0);
   Pair#(.T0(string), .T1(byte)) string_and_byte = new ("A string", 8'hff);
 #+END_SRC
-首先，由于类参数必然有默认值，故无需为每个参数指定类型。如上例的第一行和第二行的情况，都得到一个保存两个整数值的二元组。另外，与module的端口类似，类的参数值可以采用按位置或按参数名的方式指定。如上例的第三和第四行所示。
+首先，由于类参数必然有默认值，故无需为每个参数指定类型。如上例的第一行和第二行的情况，都得到一个保存两个整数值的二元组。另外，与module的端口类似，类的参数值可以采用按位置或按参数名的方式指定，分别如上例的第三和第四行所示。
 
 * 泛型类+静态成员函数＝泛型函数
 
@@ -60,7 +65,7 @@ SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的�
 
 [[./images/pipeline.svg]]
 
-如果将所传输的数据的类型作为参数，则很容易构造一个可以为流水线的各级产生输入激励和采样输出的验证类。在这里我们利用interface以及virtual interface简化RTL和验证的代码。
+如果将所传输的数据的类型作为参数，则很容易构造一个可以为流水线的各级产生输入激励和采样输出的验证类。在这里我们利用interface以及virtual interface简化RTL和验证的代码，并用泛型类实现一个统一的输入激励和输出采样的框架。
 
 ** interface与virtual interface
 
@@ -105,36 +110,28 @@ SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的�
   endinterface // Purple
 #+END_SRC
 
-四个interface都满足：
+四个interface除了data的类型不同之外，都满足：
   1. 都有data, valid, ready三个成员变量；
   2. valid和ready都是bit类型；
-  3. 都有两个modport定义，分别是prec和succ，且data, valid和ready在
-     modport中的端口方向相同；
-  4. 都有一个名为sync的clocking模块，且其中对data, valid和ready的端口
-     定义都一致。
+  3. 都有两个modport定义，分别是prec和succ，且data，valid和ready在modport中的端口方向相同；
+  4. 都有一个名为sync的clocking模块，且其中对data, valid和ready的端口定义都一致。
 
-四个interface唯一的不同点就是data的类型。有了以上的interface定义，我们
-就可以通过泛型编程为之编写统一的激励和采样代码。
+基于以上的共同点，我们就可以通过泛型编程为之编写统一的激励和采样代码。
 
-在编写之前，还需要介绍一个重要的概念——virtual interface。interface和
-module类似，其实例在电路中都是一个独立的实体，代表着一组信号。
-interface不能作为类型声明变量。但是virtual interface可以构造一个对某个
-interface实例的引用。也就是说，virtual interface定义了一种类型，可作为
-泛型编程的类型参数。利用virtual interface，该流水线电路的输入激励可以
-用如下的泛型类实现。
+在编写之前，还需要介绍一个重要的概念——virtual interface。interface本身不是类型，不能用于声明变量。其用法与module类似，interface的每个实例在电路中都是一个独立的实体，代表着一组信号。但是SystemVerilog中可以为任意的interface声明对应的virtual interface类型。该类型的变量相当于一个指向对应interface的实例的引用。通过该变量，我们可以访问interface中的成员变量，function，task或clocking模块。由于virtual interface是一种类型，故可用于泛型编程。将virtual interface作为类型参数，该流水线电路的输入激励可以用如下的泛型类实现。
 
 #+BEGIN_SRC verilog
-  class Stimulator #(type PipeType, // virtual interface
+  class Stimulator #(type PipeType, // virtual interface类型参数
                      type DataType  // data的类型
                      );
-     PipeType pipe;
+     PipeType pipe; // 对interface的引用变量
      function new (PipeType _pipe);
         pipe = _pipe;
      endfunction // new
 
      // 将一组data送入某个module
      task call(DataType data[]);
-        @pipe.sync;
+        @pipe.sync; // 通过pipe访问interface中的sync时钟
         foreach (data[i]) begin
            pipe.sync.data = data[i];
            pipe.sync.valid = 1;
@@ -176,4 +173,60 @@ interface实例的引用。也就是说，virtual interface定义了一种类型
 
 #+END_SRC
 
+有了这两个泛型类，我们只需要将对应的virtual interface类型和数据类型代入后，就可以为流水线上的任意一级生成输入激励以及采样输出，并将采样输出与期望值比较以确定验证结果。以下代码即为利用泛型验证整条流水线的一个演示。注意其中virtual interface类型是如何定义以及其变量是如何赋值的。
 
+#+BEGIN_SRC verilog
+  bit clk;
+  // Interface的实例
+  Green green(.clk);
+  Blue blue(.clk);
+  Red red(.clk);
+  Purple purple(.clk);
+
+  // Module的实例，假定各个module的前级interface为prec，后级为succ
+  Module1 the_m1(.clk, .prec(red), .succ(blue));
+  Module2 the_m2(.clk, .prec(blue), .succ(red));
+  Module3 the_m3(.clk, .prec(red), .succ(puple));
+
+  // 输入激励与输出采样类
+  Stimulator#(.PipeType(virtual green), .DataType(GreenData)) stimulator = new (green);
+  Sampler#(.PipeType(virtual blue), .DataType(BlueData)) blue_sampler = new (blue);
+  Sampler#(.PipeType(virtual red), .DataType(RedData)) red_sampler = new (red);
+  Sampler#(.PipeType(virtual purple), .DataType(PurpleData)) purple_sampler = new (purple);
+
+  // 验证流水线各级
+  task verify_all_stage();
+     localparam N = 16;
+     // 输入激励
+     GreenData green_data[N];
+     //　采样输出
+     BlueData blue_data[$];
+     RedData red_data[$];
+     PurpleData purple_data[$];
+     // 期望值，假定每个输入激励都能在各及产生一个输出，则各级的期望值也是N个
+     BlueData expected_blue_data[N];
+     RedData expected_red_data[N];
+     PurpleData expected_purple_data[N];
+
+     foreach (green_data[i]) begin
+        green_data[i] = /* 生成输入激励，略 */;
+        expected_blue_data[i] = /* 生成期望值，略 */;
+        expected_red_data[i] = /* 生成期望值，略 */;
+        expected_purple_data[i] = /* 生成期望值，略 */;
+     end
+
+     // 执行输入激励并在各级采样
+     fork
+        stimulator.call(green_data);
+        blue_sampler.call(n, blue_data);
+        red_sample.call(n, red_data);
+        puple_sample.call(n, purple_data);
+     join
+
+     // 将期望值与采样值比较，略
+  endtask // verify_all_stage
+#+END_SRC
+很显然，对流水线各级的单元测试可以利用类似的代码轻松实现。
+
+* 总结
+万万没想到SystemVerilog居然支持泛型。不过我自从学会了这项技能后就用得停不下来。虽然SystemVerilog的泛型还不如C++中的那么强大，比如其不支持泛型函数，遑论类型推导。并且，各EDA大厂的仿真器并不一定支持最新的SystemVerilog标准，总是需要我们在哪里削足适履。即便如此，泛型还是能给我们的日常开发工作带来很大的便利，多少消灭一些冗长重复的代码。人生攸然，多用泛型。
