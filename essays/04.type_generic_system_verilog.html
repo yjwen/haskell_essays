@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-07-19 Sun 14:11 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SystemVerilog中的泛型编程</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">SystemVerilog中的泛型编程</h1>
+<blockquote>
+<p>
+由于本人手头没有能够被个人使用的SystemVerilog的编译器及仿真器，因此，本文中的代码仅依照SystemVerilog标准而写成，未经过编译验证。但是，其中的编程思路已经在本人的工作中进行过验证。如您发现任何有关本文代码的问题，欢迎在本文的<a href="https://github.com/yjwen/haskell_essays/issues/new">github issue</a>页提交问题。
+</p>
+</blockquote>
+
+<p>
+泛型，几乎是现代静态类型编程语言中不可或缺的一种特性。他可以帮助我们在享用静态类型所带来的类型安全的同时，又可以像动态类型语言那样将同一套算法应用于已知或未知的多种类型。作为一名多年的C++开发人员，我总是在日常开发中积极实践泛型编程以提高开发效率。最近几年，我更多地使用SystemVerilog进行芯片逻辑设计和验证。其中，验证的代码量几倍于逻辑设计。每当我挣扎于各种繁复雷同的验证代码时，总不禁怀念C++的简练。直到某日，我突然发现SystemVerilog居然可以定义泛型类！
+</p>
+
+<div id="outline-container-orga56c07d" class="outline-2">
+<h2 id="orga56c07d"><span class="section-number-2">1</span> 泛型类</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+SystemVerilog支持对类（class）的参数化。难能可贵的是，类的参数不仅可以是一个常数，还可以是一个类型。下面的代码就利用类型参数定义了一个二元组类Pair。
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #ffad29; font-weight: bold;">class</span> Pair<span style="color: #34cae2; font-weight: bold;"> #(</span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> T0 = </span><span style="color: #34cae2; font-weight: bold;">int</span><span style="color: #34cae2; font-weight: bold;">,</span>
+<span style="color: #34cae2; font-weight: bold;">             </span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> T1 = </span><span style="color: #34cae2; font-weight: bold;">int</span><span style="color: #34cae2; font-weight: bold;">)</span>;
+   T0 first;
+   T1 second;
+
+   <span style="color: #ffad29; font-weight: bold;">function</span> <span style="color: #34cae2; font-weight: bold;">new</span>(T0 _first, T1 _second);
+      first = _first;
+      second = _second;
+   <span style="color: #ffad29; font-weight: bold;">endfunction</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">new</span>
+<span style="color: #ffad29; font-weight: bold;">endclass</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Pair</span>
+</pre>
+</div>
+<p>
+在井号之后的是Pair的参数列表。其中，类型参数以关键字type开头，后接类型参数名。与C++的模板参数不同，SystemVerilog的参数必须有一个默认値。此处，类型参数T0和T1的默认値都设为int。类型参数可用定义成员变量的类型，成员函数的参数类型，返回类型以及typedef语句等任何需要类型定义的地方。
+</p>
+
+<p>
+通过为类型参数T0和T1指定不同的类型，我们可以得到保存不同类型的数据的二元组类。下面的代码列出了几种指定类型参数的方式。
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog">Pair int_and_int = <span style="color: #34cae2; font-weight: bold;">new</span> (0, 0);
+Pair#(<span style="color: #34cae2; font-weight: bold;">int</span>) still_int_and_int = <span style="color: #34cae2; font-weight: bold;">new</span> (1, 1);
+Pair#(<span style="color: #34cae2; font-weight: bold;">int</span>, <span style="color: #34cae2; font-weight: bold;">bit</span>) int_and_bit = <span style="color: #34cae2; font-weight: bold;">new</span> (1, 1'b0);
+Pair#(.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">T0</span>(<span style="color: #34cae2; font-weight: bold;">string</span>), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">T1</span>(<span style="color: #34cae2; font-weight: bold;">byte</span>)) string_and_byte = <span style="color: #34cae2; font-weight: bold;">new</span> (<span style="color: #e67128;">"A string"</span>, 8'hff);
+</pre>
+</div>
+<p>
+首先，由于类参数必然有默认值，故无需为每个参数指定类型。如上例的第一行和第二行的情况，都得到一个保存两个整数值的二元组。另外，与module的端口类似，类的参数值可以采用按位置或按参数名的方式指定，分别如上例的第三和第四行所示。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga0164a3" class="outline-2">
+<h2 id="orga0164a3"><span class="section-number-2">2</span> 泛型类+静态成员函数＝泛型函数</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+SystemVerilog不支持像C++函数模板那样直接定义泛型的函数(function或task)。要想实现一个泛型的函数，只能利用泛型类的静态成员函数。例如，要实现一个泛型的矩阵转置函数，可以采用如下的代码。
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #ffad29; font-weight: bold;">class</span> Matrix<span style="color: #34cae2; font-weight: bold;"> #(</span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> T = </span><span style="color: #34cae2; font-weight: bold;">int</span><span style="color: #34cae2; font-weight: bold;">, </span><span style="color: #34cae2; font-weight: bold;">int</span><span style="color: #34cae2; font-weight: bold;"> NR = 2, </span><span style="color: #34cae2; font-weight: bold;">int</span><span style="color: #34cae2; font-weight: bold;"> NC = 4)</span>;
+   <span style="color: #34cae2; font-weight: bold;">typedef</span> T InputM[NR][NC]; <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23450;&#20041;&#36755;&#20837;&#30697;&#38453;&#31867;&#22411;</span>
+   <span style="color: #34cae2; font-weight: bold;">typedef</span> T OutputM[NC][NR]; <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23450;&#20041;&#36755;&#20986;&#30697;&#38453;&#31867;&#22411;</span>
+
+   <span style="color: #34cae2; font-weight: bold;">static</span> <span style="color: #ffad29; font-weight: bold;">function</span> <span style="color: #008b8b; font-weight: bold;">OutputM</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">transpose</span>(InputM m);
+      <span style="color: #34cae2; font-weight: bold;">foreach</span> (m[r, c])
+        transpose[c][r] = m[r][c];
+   <span style="color: #ffad29; font-weight: bold;">endfunction</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">transpose</span>
+<span style="color: #ffad29; font-weight: bold;">endclass</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Matrix</span>
+</pre>
+</div>
+
+<p>
+SystemVerilog也不支持类型参数的自动推导。要调用一个泛型的静态成员函数，必须明确的声明一个对应的泛型类。调用上述的矩阵转置函数的代码如下。
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #34cae2; font-weight: bold;">typedef</span> Matrix#(<span style="color: #34cae2; font-weight: bold;">real</span>, 4, 8) RealM4x8;
+<span style="color: #34cae2; font-weight: bold;">real</span> om[8][4];
+<span style="color: #34cae2; font-weight: bold;">real</span> im[4][8];
+
+om = RealM4x8::<span style="color: #00ede1; font-size: 110%; font-weight: bold;">transpose</span>(im);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4a205c6" class="outline-2">
+<h2 id="org4a205c6"><span class="section-number-2">3</span> 一个例子——验证流水线</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+泛型编程就是为了面向具有某种共同特征的不同类型的数据统一构建代码而设计的。在电路设计领域，各个模块之间的数据交互通常遵循某种协议，但是所交互数据的类型不尽一致。无论是对单个模块进行验证还是多个模块的联合验证，通常需要按协议准备输入激励以及按协议采集模块的输出并与期望值进行比对。这一过程正好可以利用泛型编程统一实现。
+</p>
+
+<p>
+假设我们要验证如下的流水线电路。图中的粗箭头表示流水线上的数据流向。流水线的输入，输出以及各模块之间的中间数据类型都不相同，以箭头的颜色表示。虽然类型不同，但是数据在模块间的传递都遵循一个简单的协议：所有模块采用同一个时钟信号同步；前级输出一个valid信号给后级，以标记输出数据是否有效；后级模块输出一个ready信号给前级以标记其是否准备接收数据；只有ready和valid同时为1时才表明数据已经完成传递。
+</p>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="./images/pipeline.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+
+<p>
+如果将所传输的数据的类型作为参数，则很容易构造一个可以为流水线的各级产生输入激励和采样输出的验证类。在这里我们利用interface以及virtual interface简化RTL和验证的代码，并用泛型类实现一个统一的输入激励和输出采样的框架。
+</p>
+</div>
+
+<div id="outline-container-org240bd2d" class="outline-3">
+<h3 id="org240bd2d"><span class="section-number-3">3.1</span> interface与virtual interface</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+首先，我们采用interface描述图中各级的输入输出数据。
+</p>
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23558;interface&#30340;&#36890;&#29992;&#37096;&#20998;&#23450;&#20041;&#20026;&#19968;&#20010;&#23439;</span>
+<span style="color: #d18aff; font-style: italic;">`define</span> PipeContent<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>  <span style="color: #34cae2; font-weight: bold;">modport</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">prec</span> (<span style="color: #34cae2; font-weight: bold;">input</span> data, valid, <span style="color: #34cae2; font-weight: bold;">output</span> ready);<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>  <span style="color: #34cae2; font-weight: bold;">modport</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">succ</span> (<span style="color: #34cae2; font-weight: bold;">output</span> data, valid, <span style="color: #34cae2; font-weight: bold;">input</span> ready);<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>  <span style="color: #34cae2; font-weight: bold;">clocking</span> sync <span style="color: #34cae2; font-weight: bold;">@</span>(<span style="color: #ffad29; font-weight: bold;">posedge</span> clk);<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>     <span style="color: #ffad29; font-weight: bold;">default</span> <span style="color: #34cae2; font-weight: bold;">input #1</span>step <span style="color: #34cae2; font-weight: bold;">output</span> <span style="color: #34cae2; font-weight: bold;">@</span>(<span style="color: #ffad29; font-weight: bold;">negedge</span> clk);<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>     <span style="color: #34cae2; font-weight: bold;">input</span> data, valid, ready;<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>     <span style="color: #34cae2; font-weight: bold;">output</span> data, valid, ready;<span style="color: #00ede1; font-size: 110%; font-weight: bold;">\</span>
+<span style="color: #00ede1; font-size: 110%; font-weight: bold;"> </span>  <span style="color: #34cae2; font-weight: bold;">endclocking</span>\
+
+<span style="color: #ffad29; font-weight: bold;">interface</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">Green</span> (<span style="color: #34cae2; font-weight: bold;">input</span> <span style="color: #34cae2; font-weight: bold;">bit</span> clk);
+   GreenData data; 
+   <span style="color: #34cae2; font-weight: bold;">bit</span> ready;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> valid;
+   <span style="color: #d18aff; font-style: italic;">`PipeContent</span>;
+<span style="color: #ffad29; font-weight: bold;">endinterface</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Green</span>
+
+<span style="color: #ffad29; font-weight: bold;">interface</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">Blue</span> (<span style="color: #34cae2; font-weight: bold;">input</span> <span style="color: #34cae2; font-weight: bold;">bit</span> clk);
+   BlueData data;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> ready;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> valid;
+   <span style="color: #d18aff; font-style: italic;">`PipeContent</span>;
+<span style="color: #ffad29; font-weight: bold;">endinterface</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Blue</span>
+
+<span style="color: #ffad29; font-weight: bold;">interface</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">Red</span> (<span style="color: #34cae2; font-weight: bold;">input</span> <span style="color: #34cae2; font-weight: bold;">bit</span> clk);
+   RedData data;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> ready;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> valid;
+   <span style="color: #d18aff; font-style: italic;">`PipeContent</span>;
+<span style="color: #ffad29; font-weight: bold;">endinterface</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Red</span>
+
+<span style="color: #ffad29; font-weight: bold;">interface</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">Purple</span> (<span style="color: #34cae2; font-weight: bold;">input</span> <span style="color: #34cae2; font-weight: bold;">bit</span> clk);
+   PurpleData data;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> ready;
+   <span style="color: #34cae2; font-weight: bold;">bit</span> valid;
+   <span style="color: #d18aff; font-style: italic;">`PipeContent</span>;
+<span style="color: #ffad29; font-weight: bold;">endinterface</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Purple</span>
+</pre>
+</div>
+
+<p>
+四个interface除了data的类型不同之外，都满足：
+</p>
+<ol class="org-ol">
+<li>都有data, valid, ready三个成员变量；</li>
+<li>valid和ready都是bit类型；</li>
+<li>都有两个modport定义，分别是prec和succ，且data，valid和ready在modport中的端口方向相同；</li>
+<li>都有一个名为sync的clocking模块，且其中对data, valid和ready的端口定义都一致。</li>
+</ol>
+
+<p>
+基于以上的共同点，我们就可以通过泛型编程为之编写统一的激励和采样代码。
+</p>
+
+<p>
+在编写之前，还需要介绍一个重要的概念——virtual interface。interface本身不是类型，不能用于声明变量。其用法与module类似，interface的每个实例在电路中都是一个独立的实体，代表着一组信号。但是SystemVerilog中可以为任意的interface声明对应的virtual interface类型。该类型的变量相当于一个指向对应interface的实例的引用。通过该变量，我们可以访问interface中的成员变量，function，task或clocking模块。由于virtual interface是一种类型，故可用于泛型编程。将virtual interface作为类型参数，该流水线电路的输入激励可以用如下的泛型类实现。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #ffad29; font-weight: bold;">class</span> Stimulator<span style="color: #34cae2; font-weight: bold;"> #(</span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> PipeType, </span><span style="color: #6c6c6c; font-weight: bold; font-style: italic;">// </span><span style="color: #74af68; font-weight: bold; font-style: italic;">virtual interface&#31867;&#22411;&#21442;&#25968;</span>
+<span style="color: #34cae2; font-weight: bold;">                   </span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> DataType  </span><span style="color: #6c6c6c; font-weight: bold; font-style: italic;">// </span><span style="color: #74af68; font-weight: bold; font-style: italic;">data&#30340;&#31867;&#22411;</span>
+<span style="color: #34cae2; font-weight: bold;">                   )</span>;
+   PipeType pipe; <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23545;interface&#30340;&#24341;&#29992;&#21464;&#37327;</span>
+   <span style="color: #ffad29; font-weight: bold;">function</span> <span style="color: #34cae2; font-weight: bold;">new</span> (PipeType _pipe);
+      pipe = _pipe;
+   <span style="color: #ffad29; font-weight: bold;">endfunction</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">new</span>
+
+   <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23558;&#19968;&#32452;data&#36865;&#20837;&#26576;&#20010;module</span>
+   <span style="color: #ffad29; font-weight: bold;">task</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">call</span>(DataType data[]);
+      <span style="color: #34cae2; font-weight: bold;">@</span>pipe.sync; <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#36890;&#36807;pipe&#35775;&#38382;interface&#20013;&#30340;sync&#26102;&#38047;</span>
+      <span style="color: #34cae2; font-weight: bold;">foreach</span> (data[i]) <span style="color: #34cae2; font-weight: bold;">begin</span>
+         pipe.sync.data = data[i];
+         pipe.sync.valid = 1;
+         <span style="color: #34cae2; font-weight: bold;">@</span>pipe.sync;
+         <span style="color: #ffad29; font-weight: bold;">while</span> (!pipe.sync.read)
+           <span style="color: #34cae2; font-weight: bold;">@</span>pipe.sync;
+      <span style="color: #34cae2; font-weight: bold;">end</span>
+      pipe.sync.valid = 0;
+   <span style="color: #ffad29; font-weight: bold;">endtask</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">call</span>
+<span style="color: #ffad29; font-weight: bold;">endclass</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Stimulator</span>
+
+</pre>
+</div>
+
+<p>
+同理，我们还可以为各个interface编写输出采样代码。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #ffad29; font-weight: bold;">class</span> Sampler<span style="color: #34cae2; font-weight: bold;"> #(</span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> PipeType, </span><span style="color: #6c6c6c; font-weight: bold; font-style: italic;">// </span><span style="color: #74af68; font-weight: bold; font-style: italic;">virtual interface</span>
+<span style="color: #34cae2; font-weight: bold;">                </span><span style="color: #34cae2; font-weight: bold;">type</span><span style="color: #34cae2; font-weight: bold;"> DataType </span><span style="color: #6c6c6c; font-weight: bold; font-style: italic;">// </span><span style="color: #74af68; font-weight: bold; font-style: italic;">data&#30340;&#31867;&#22411;</span>
+<span style="color: #34cae2; font-weight: bold;">                )</span>;
+   PipeType pipe; <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23545;&#26576;&#20010;interface&#30340;&#24341;&#29992;&#21464;&#37327;</span>
+   <span style="color: #ffad29; font-weight: bold;">function</span> <span style="color: #34cae2; font-weight: bold;">new</span> (PipeType _pipe);
+      pipe = _pipe;
+   <span style="color: #ffad29; font-weight: bold;">endfunction</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">new</span>
+
+   <span style="color: #ffad29; font-weight: bold;">task</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">call</span>(<span style="color: #34cae2; font-weight: bold;">input</span> n_samples,  <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#37319;&#26679;&#25968;&#25454;&#25968;</span>
+             <span style="color: #34cae2; font-weight: bold;">output</span> DataType data[$]&#12288;<span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#25152;&#37319;&#25968;&#25454;</span>
+             );
+      data = {};
+      pipe.sync.ready = 1;
+      <span style="color: #ffad29; font-weight: bold;">repeat</span> (n_samples) <span style="color: #34cae2; font-weight: bold;">begin</span>
+         <span style="color: #34cae2; font-weight: bold;">@</span>pipe.sync;
+         <span style="color: #ffad29; font-weight: bold;">while</span> (!pipe.sync.valid)
+           <span style="color: #34cae2; font-weight: bold;">@</span>pipe.sync;
+         data.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">push_back</span>(pipe.sync.data);
+      <span style="color: #34cae2; font-weight: bold;">end</span>
+      pipe.sync.ready = 0;
+   <span style="color: #ffad29; font-weight: bold;">endtask</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">call</span>
+<span style="color: #ffad29; font-weight: bold;">endclass</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Sampler</span>
+
+</pre>
+</div>
+
+<p>
+有了这两个泛型类，我们只需要将对应的virtual interface类型和数据类型代入后，就可以为流水线上的任意一级生成输入激励以及采样输出，并将采样输出与期望值比较以确定验证结果。以下代码即为利用泛型验证整条流水线的一个演示。注意其中virtual interface类型是如何定义以及其变量是如何赋值的。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-verilog"><span style="color: #34cae2; font-weight: bold;">bit</span> clk;
+<span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Interface&#30340;&#23454;&#20363;</span>
+Green <span style="color: #00ede1; font-size: 110%; font-weight: bold;">green</span>(.clk);
+Blue <span style="color: #00ede1; font-size: 110%; font-weight: bold;">blue</span>(.clk);
+Red <span style="color: #00ede1; font-size: 110%; font-weight: bold;">red</span>(.clk);
+Purple <span style="color: #00ede1; font-size: 110%; font-weight: bold;">purple</span>(.clk);
+
+<span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">Module&#30340;&#23454;&#20363;&#65292;&#20551;&#23450;&#21508;&#20010;module&#30340;&#21069;&#32423;interface&#20026;prec&#65292;&#21518;&#32423;&#20026;succ</span>
+Module1 <span style="color: #00ede1; font-size: 110%; font-weight: bold;">the_m1</span>(.clk, .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">prec</span>(red), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">succ</span>(blue));
+Module2 <span style="color: #00ede1; font-size: 110%; font-weight: bold;">the_m2</span>(.clk, .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">prec</span>(blue), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">succ</span>(red));
+Module3 <span style="color: #00ede1; font-size: 110%; font-weight: bold;">the_m3</span>(.clk, .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">prec</span>(red), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">succ</span>(puple));
+
+<span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#36755;&#20837;&#28608;&#21169;&#19982;&#36755;&#20986;&#37319;&#26679;&#31867;</span>
+Stimulator#(.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">PipeType</span>(<span style="color: #34cae2; font-weight: bold;">virtual</span> green), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">DataType</span>(GreenData)) stimulator = <span style="color: #34cae2; font-weight: bold;">new</span> (green);
+Sampler#(.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">PipeType</span>(<span style="color: #34cae2; font-weight: bold;">virtual</span> blue), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">DataType</span>(BlueData)) blue_sampler = <span style="color: #34cae2; font-weight: bold;">new</span> (blue);
+Sampler#(.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">PipeType</span>(<span style="color: #34cae2; font-weight: bold;">virtual</span> red), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">DataType</span>(RedData)) red_sampler = <span style="color: #34cae2; font-weight: bold;">new</span> (red);
+Sampler#(.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">PipeType</span>(<span style="color: #34cae2; font-weight: bold;">virtual</span> purple), .<span style="color: #00ede1; font-size: 110%; font-weight: bold;">DataType</span>(PurpleData)) purple_sampler = <span style="color: #34cae2; font-weight: bold;">new</span> (purple);
+
+<span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#39564;&#35777;&#27969;&#27700;&#32447;&#21508;&#32423;</span>
+<span style="color: #ffad29; font-weight: bold;">task</span> <span style="color: #00ede1; font-size: 110%; font-weight: bold;">verify_all_stage</span>();
+   <span style="color: #34cae2; font-weight: bold;">localparam</span> N = 16;
+   <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#36755;&#20837;&#28608;&#21169;</span>
+   GreenData green_data[N];
+   <span style="color: #6c6c6c; font-style: italic;">//</span><span style="color: #74af68; font-style: italic;">&#12288;&#37319;&#26679;&#36755;&#20986;</span>
+   BlueData blue_data[$];
+   RedData red_data[$];
+   PurpleData purple_data[$];
+   <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#26399;&#26395;&#20540;&#65292;&#20551;&#23450;&#27599;&#20010;&#36755;&#20837;&#28608;&#21169;&#37117;&#33021;&#22312;&#21508;&#21450;&#20135;&#29983;&#19968;&#20010;&#36755;&#20986;&#65292;&#21017;&#21508;&#32423;&#30340;&#26399;&#26395;&#20540;&#20063;&#26159;N&#20010;</span>
+   BlueData expected_blue_data[N];
+   RedData expected_red_data[N];
+   PurpleData expected_purple_data[N];
+
+   <span style="color: #34cae2; font-weight: bold;">foreach</span> (green_data[i]) <span style="color: #34cae2; font-weight: bold;">begin</span>
+      green_data[i] = <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #74af68; font-style: italic;">&#29983;&#25104;&#36755;&#20837;&#28608;&#21169;&#65292;&#30053; */</span>;
+      expected_blue_data[i] = <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #74af68; font-style: italic;">&#29983;&#25104;&#26399;&#26395;&#20540;&#65292;&#30053; */</span>;
+      expected_red_data[i] = <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #74af68; font-style: italic;">&#29983;&#25104;&#26399;&#26395;&#20540;&#65292;&#30053; */</span>;
+      expected_purple_data[i] = <span style="color: #6c6c6c; font-style: italic;">/* </span><span style="color: #74af68; font-style: italic;">&#29983;&#25104;&#26399;&#26395;&#20540;&#65292;&#30053; */</span>;
+   <span style="color: #34cae2; font-weight: bold;">end</span>
+
+   <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#25191;&#34892;&#36755;&#20837;&#28608;&#21169;&#24182;&#22312;&#21508;&#32423;&#37319;&#26679;</span>
+   <span style="color: #ffad29; font-weight: bold;">fork</span>
+      stimulator.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">call</span>(green_data);
+      blue_sampler.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">call</span>(n, blue_data);
+      red_sample.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">call</span>(n, red_data);
+      puple_sample.<span style="color: #00ede1; font-size: 110%; font-weight: bold;">call</span>(n, purple_data);
+   <span style="color: #ffad29; font-weight: bold;">join</span>
+
+   <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">&#23558;&#26399;&#26395;&#20540;&#19982;&#37319;&#26679;&#20540;&#27604;&#36739;&#65292;&#30053;</span>
+<span style="color: #ffad29; font-weight: bold;">endtask</span> <span style="color: #6c6c6c; font-style: italic;">// </span><span style="color: #74af68; font-style: italic;">verify_all_stage</span>
+</pre>
+</div>
+<p>
+很显然，对流水线各级的单元测试可以利用类似的代码轻松实现。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org892bf64" class="outline-2">
+<h2 id="org892bf64"><span class="section-number-2">4</span> 总结</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+万万没想到SystemVerilog居然支持泛型。不过我自从学会了这项技能后就用得停不下来。虽然SystemVerilog的泛型还不如C++中的那么强大，比如其不支持泛型函数，遑论类型推导。并且，各EDA大厂的仿真器并不一定支持最新的SystemVerilog标准，总是需要我们在哪里削足适履。即便如此，泛型还是能给我们的日常开发工作带来很大的便利，多少消灭一些冗长重复的代码。人生攸然，多用泛型。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2020-07-19 Sun 14:11</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
